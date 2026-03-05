@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approved Doctors - DermaScan AI Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --info-color: #3B82F6;
+            --light-bg: #F7F9FC;
+            --dark-bg: #0A1929;
+            --sidebar-bg: #0F172A;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+        }
+
+        /* ========== MAIN CONTENT LAYOUT ========== */
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* ========== TOP HEADER ========== */
+        .admin-topbar {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar-title h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .topbar-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .topbar-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .topbar-breadcrumb a:hover {
+            color: var(--accent-color);
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 0.7rem 1rem 0.7rem 2.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            width: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(29, 122, 140, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-text);
+        }
+
+        /* ========== DASHBOARD CONTENT ========== */
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        /* Stats Summary */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--success-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card.total {
+            border-left-color: var(--success-color);
+        }
+
+        .stat-card.top-rated {
+            border-left-color: var(--accent-color);
+        }
+
+        .stat-card.active {
+            border-left-color: var(--info-color);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        /* Doctors Section */
+        .doctors-section {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .section-header h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .export-btn {
+            padding: 0.7rem 1.5rem;
+            background: var(--gradient-1);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.3);
+        }
+
+        /* Doctors Grid */
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .doctor-card {
+            background: var(--light-bg);
+            border-radius: 16px;
+            padding: 1.8rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .doctor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: var(--success-color);
+            opacity: 0.05;
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .doctor-header {
+            display: flex;
+            align-items: start;
+            gap: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .doctor-avatar {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+            position: relative;
+        }
+
+        .verified-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 24px;
+            height: 24px;
+            background: var(--success-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 0.7rem;
+            border: 3px solid var(--light-bg);
+        }
+
+        .doctor-info {
+            flex: 1;
+        }
+
+        .doctor-name {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .doctor-username {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--light-text);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .doctor-credentials {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        /* Rating Display */
+        .rating-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(242, 143, 59, 0.1);
+            border-radius: 10px;
+        }
+
+        .rating-stars {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .star {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+        }
+
+        .star.empty {
+            color: #D1D5DB;
+        }
+
+        .rating-value {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .rating-count {
+            font-size: 0.85rem;
+            color: var(--light-text);
+        }
+
+        .doctor-details {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: start;
+            gap: 0.8rem;
+        }
+
+        .detail-icon {
+            width: 35px;
+            height: 35px;
+            background: var(--white);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            flex-shrink: 0;
+        }
+
+        .detail-content {
+            flex: 1;
+        }
+
+        .detail-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.2rem;
+        }
+
+        .detail-value {
+            font-size: 0.95rem;
+            color: var(--dark-text);
+            word-break: break-word;
+        }
+
+        .doctor-actions {
+            display: flex;
+            gap: 0.8rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .action-btn.view-rating {
+            background: var(--accent-color);
+            color: var(--white);
+        }
+
+        .action-btn.view-rating:hover {
+            background: #D97706;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(242, 143, 59, 0.3);
+        }
+
+        .action-btn.contact {
+            background: var(--secondary-color);
+            color: var(--white);
+        }
+
+        .action-btn.contact:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--light-text);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+            }
+
+            .doctors-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-topbar {
+                padding: 1rem;
+            }
+
+            .topbar-title h1 {
+                font-size: 1.5rem;
+            }
+
+            .search-box {
+                display: none;
+            }
+
+            .dashboard-content {
+                padding: 1rem;
+            }
+
+            .doctors-section {
+                padding: 1.5rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .doctors-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .doctor-actions {
+                flex-direction: column;
+            }
+
+            .stats-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <!-- Include Admin Sidebar -->
+        {% include 'admin_header.html' %}
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="admin-topbar">
+                <div class="topbar-title">
+                    <h1>Approved Doctors</h1>
+                    <div class="topbar-breadcrumb">
+                        <a href="/admin_index">Dashboard</a>
+                        <i class="fas fa-chevron-right"></i>
+                        <span>Approved Doctors</span>
+                    </div>
+                </div>
+                {# <div class="topbar-actions">#}
+                    {# <div class="search-box">#}
+                        {# <i class="fas fa-search"></i>#}
+                        {# <input type="text" placeholder="Search doctors..." id="searchInput">#}
+                        {# </div>#}
+                    {# </div>#}
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Stats Summary -->
+                <div class="stats-summary">
+                    <div class="stat-card total">
+                        <div class="stat-label">Total Approved</div>
+                        <div class="stat-value">{{ doctor|length }}</div>
+                    </div>
+                    <div class="stat-card top-rated">
+                        <div class="stat-label">Top Rated (4.5+)</div>
+                        <div class="stat-value">{{ top_rated_count|default:"0" }}</div>
+                    </div>
+                    <div class="stat-card active">
+                        <div class="stat-label">Active This Month</div>
+                        <div class="stat-value">{{ active_month_count|default:"0" }}</div>
+                    </div>
+                </div>
+
+                <!-- Doctors Section -->
+                <div class="doctors-section">
+                    <div class="section-header">
+                        <h2>Verified Doctors</h2>
+                        {# <button class="export-btn">#}
+                            {# <i class="fas fa-download"></i>#}
+                            {# Export List#}
+                            {# </button>#}
+                    </div>
+
+                    <!-- Doctors Grid -->
+                    {% if doctor %}
+                    <div class="doctors-grid">
+                        {% for d in doctor %}
+                        <div class="doctor-card">
+                            <div class="doctor-header">
+                                <div class="doctor-avatar">
+                                    {{ d.name|slice:":2"|upper }}
+                                    <span class="verified-badge">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                </div>
+                                <div class="doctor-info">
+                                    <h3 class="doctor-name">Dr. {{ d.name }}</h3>
+                                    <div class="doctor-username">
+                                        <i class="fas fa-at"></i>
+                                        <span>{{ d.USER_ID.username }}</span>
+                                    </div>
+                                    <div class="doctor-credentials">
+                                        <i class="fas fa-id-card"></i>
+                                        <span>{{ d.regno }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Rating Section -->
+                            <div class="rating-section">
+                                <div class="rating-stars">
+                                    {% for i in "12345" %}
+                                    {% if forloop.counter <= d.avg_rating %} <i class="fas fa-star star"></i>
+                                        {% else %}
+                                        <i class="fas fa-star star empty"></i>
+                                        {% endif %}
+                                        {% endfor %}
+                                </div>
+                                <span class="rating-value">{{ d.avg_rating|default:"0.0" }}</span>
+                                <span class="rating-count">({{ d.total_reviews }} reviews)</span>
+                            </div>
+
+                            <div class="doctor-details">
+                                <div class="detail-item">
+                                    <div class="detail-icon">
+                                        <i class="fas fa-hospital"></i>
+                                    </div>
+                                    <div class="detail-content">
+                                        <div class="detail-label">Medical Council</div>
+                                        <div class="detail-value">{{ d.smc }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="detail-content">
+                                        <div class="detail-label">Email</div>
+                                        <div class="detail-value">{{ d.email }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-icon">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div class="detail-content">
+                                        <div class="detail-label">Phone</div>
+                                        <div class="detail-value">{{ d.phone }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-icon">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div class="detail-content">
+                                        <div class="detail-label">Address</div>
+                                        <div class="detail-value">{{ d.address }}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="doctor-actions">
+                                <a href="{% url 'view_rating' d.id %}" class="action-btn view-rating">
+                                    <i class="fas fa-star"></i>
+                                    View Ratings
+                                </a>
+                                {# <a href="mailto:{{ d.email }}" class="action-btn contact">#}
+                                    {# <i class="fas fa-envelope"></i>#}
+                                    {# Contact#}
+                                    {# </a>#}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-user-md"></i>
+                        <h3>No Approved Doctors</h3>
+                        <p>There are no approved doctors in the system yet</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const doctorCards = document.querySelectorAll('.doctor-card');
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function (e) {
+                const searchTerm = e.target.value.toLowerCase();
+
+                doctorCards.forEach(card => {
+                    const text = card.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Export functionality
+        const exportBtn = document.querySelector('.export-btn');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', function () {
+                alert('Export functionality - Connect to your backend to generate CSV/PDF');
+            });
+        }
+
+        // Smooth scroll for cards
+        if (doctorCards.length > 0) {
+            doctorCards.forEach((card, index) => {
+                card.style.animation = `slideUp 0.5s ease-out ${index * 0.05}s backwards`;
+            });
+        }
+
+        // Add animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>

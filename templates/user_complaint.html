@@ -1,0 +1,578 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Complaint - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--gradient-1);
+            padding: 4rem 2rem 3rem;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        }
+
+        .header-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .page-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            color: var(--white);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .page-header h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1000px;
+            margin: -3rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Complaint Form Card */
+        .form-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+
+        .card-title h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .card-title p {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.8rem;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 150px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-textarea:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(29, 122, 140, 0.1);
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--light-text);
+            margin-top: 0.5rem;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--gradient-1);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.4);
+        }
+
+        /* Complaints History */
+        .history-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .complaints-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .complaint-item {
+            background: var(--light-bg);
+            border-radius: 16px;
+            padding: 1.8rem;
+            border-left: 5px solid var(--warning-color);
+            transition: all 0.3s ease;
+        }
+
+        .complaint-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .complaint-item.replied {
+            border-left-color: var(--success-color);
+        }
+
+        .complaint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .complaint-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--light-text);
+            font-size: 0.85rem;
+        }
+
+        .status-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-badge.replied {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .complaint-text {
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 10px;
+            line-height: 1.7;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+
+        .reply-section {
+            display: none;
+            padding: 1rem;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 10px;
+            border-left: 3px solid var(--success-color);
+        }
+
+        .reply-section.active {
+            display: block;
+        }
+
+        .reply-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--success-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .reply-text {
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            color: var(--light-text);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.4rem;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 1.2rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            display: none;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .success-message.active {
+            display: flex;
+        }
+
+        .success-message i {
+            font-size: 1.5rem;
+            color: var(--success-color);
+        }
+
+        .success-message p {
+            color: var(--success-color);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 3rem 1rem 2rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 0 1rem;
+                margin: -2rem auto 2rem;
+            }
+
+            .form-card,
+            .history-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .complaint-header {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'user_header.html' %}
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-container">
+            <div class="page-icon">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <h1>Submit a Complaint</h1>
+            <p>We're here to help. Share your concerns and our team will respond promptly.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i>
+            <p>Your complaint has been submitted successfully. We'll review it shortly.</p>
+        </div>
+
+        <!-- Complaint Form -->
+        <div class="form-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <div class="card-title">
+                    <h2>New Complaint</h2>
+                    <p>Describe your issue in detail</p>
+                </div>
+            </div>
+
+            <form method="POST" id="complaintForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-comment-dots"></i>
+                        Your Complaint
+                    </label>
+                    <textarea name="complaint_text" id="complaintText" class="form-textarea"
+                        placeholder="Please provide details about your concern..." maxlength="500" required></textarea>
+                    <div class="char-counter" id="charCounter">0 / 500 characters</div>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-paper-plane"></i>
+                    Submit Complaint
+                </button>
+            </form>
+        </div>
+
+        <!-- Complaints History -->
+        <div class="history-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div class="card-title">
+                    <h2>Your Complaints ({{ complaints.count }})</h2>
+                    <p>Track the status of your submissions</p>
+                </div>
+            </div>
+
+            {% if complaints %}
+            <div class="complaints-list">
+                {% for c in complaints %}
+                <div class="complaint-item {% if c.Reply != 'pending' %}replied{% endif %}">
+                    <div class="complaint-header">
+                        <span class="complaint-date">
+                            <i class="far fa-calendar"></i>
+                            {{ c.Date }}
+                        </span>
+                        <span class="status-badge {% if c.Reply != 'pending' %}replied{% else %}pending{% endif %}">
+                            {% if c.Reply != 'pending' %}
+                            <i class="fas fa-check-circle"></i>
+                            Replied
+                            {% else %}
+                            <i class="fas fa-clock"></i>
+                            Pending
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="complaint-text">
+                        {{ c.Complaint_text }}
+                    </div>
+
+                    {% if c.Reply != 'pending' %}
+                    <div class="reply-section active">
+                        <div class="reply-label">
+                            <i class="fas fa-reply"></i>
+                            Admin Response
+                        </div>
+                        <div class="reply-text">
+                            {{ c.Reply }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h3>No Complaints Yet</h3>
+                <p>You haven't submitted any complaints. Use the form above if you need assistance.</p>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script>
+        // Character counter
+        const complaintText = document.getElementById('complaintText');
+        const charCounter = document.getElementById('charCounter');
+
+        complaintText.addEventListener('input', function () {
+            const length = this.value.length;
+            charCounter.textContent = `${length} / 500 characters`;
+        });
+
+        // Form submission
+        const complaintForm = document.getElementById('complaintForm');
+        const successMessage = document.getElementById('successMessage');
+
+        complaintForm.addEventListener('submit', function (e) {
+            // Show success message after submission
+            // Note: This will be visible after page reload from Django
+        });
+
+        // Show success message if form was just submitted
+        // You can pass a success parameter from Django view
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            successMessage.classList.add('active');
+            setTimeout(() => {
+                successMessage.classList.remove('active');
+            }, 5000);
+        }
+
+        // Animate complaint items
+        const complaintItems = document.querySelectorAll('.complaint-item');
+        if (complaintItems.length > 0) {
+            complaintItems.forEach((item, index) => {
+                item.style.animation = `slideUp 0.5s ease-out ${index * 0.1}s backwards`;
+            });
+        }
+    </script>
+</body>
+
+</html>

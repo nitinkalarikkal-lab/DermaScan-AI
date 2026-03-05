@@ -1,0 +1,725 @@
+{#{% include 'doctor_header.html' %}#}
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>Doctor Complaint</title>#}
+{##}
+{#    <style>#}
+{#        body {#}
+{#            font-family: Arial, sans-serif;#}
+{#            background-color: #f4f4f9;#}
+{#            margin: 0;#}
+{#            padding: 0;#}
+{#        }#}
+{##}
+{#        .container {#}
+{#            width: 70%;#}
+{#            margin: 40px auto;#}
+{#            background-color: white;#}
+{#            padding: 25px;#}
+{#            border-radius: 10px;#}
+{#            box-shadow: 0 4px 10px rgba(0,0,0,0.1);#}
+{#        }#}
+{##}
+{#        h2 {#}
+{#            text-align: center;#}
+{#            color: #3a64fc;#}
+{#        }#}
+{##}
+{#        /* Complaint Form */#}
+{#        .form-group {#}
+{#            margin-top: 20px;#}
+{#        }#}
+{##}
+{#        label {#}
+{#            font-size: 16px;#}
+{#            color: #333;#}
+{#            font-weight: bold;#}
+{#        }#}
+{##}
+{#        textarea {#}
+{#            width: 100%;#}
+{#            height: 120px;#}
+{#            padding: 12px;#}
+{#            margin-top: 8px;#}
+{#            border: 1px solid #ccc;#}
+{#            border-radius: 8px;#}
+{#            font-size: 15px;#}
+{#        }#}
+{##}
+{#        .btn-submit {#}
+{#            margin-top: 10px;#}
+{#            width: 100%;#}
+{#            padding: 12px;#}
+{#            background-color: #3a64fc;#}
+{#            color: white;#}
+{#            border: none;#}
+{#            border-radius: 8px;#}
+{#            font-size: 16px;#}
+{#            cursor: pointer;#}
+{#        }#}
+{##}
+{#        .btn-submit:hover {#}
+{#            background-color: #3458d6;#}
+{#        }#}
+{##}
+{#        /* Complaints Table */#}
+{#        .complaint-table {#}
+{#            width: 100%;#}
+{#            border-collapse: collapse;#}
+{#            margin-top: 30px;#}
+{#        }#}
+{##}
+{#        .complaint-table th {#}
+{#            background-color: #3a64fc;#}
+{#            color: white;#}
+{#            padding: 12px;#}
+{#            text-align: center;#}
+{#            font-size: 16px;#}
+{#        }#}
+{##}
+{#        .complaint-table td {#}
+{#            padding: 12px;#}
+{#            text-align: center;#}
+{#            border-bottom: 1px solid #ddd;#}
+{#            font-size: 15px;#}
+{#        }#}
+{##}
+{#        .status-pending {#}
+{#            color: #dc3545;#}
+{#            font-weight: bold;#}
+{#        }#}
+{##}
+{#        .status-replied {#}
+{#            color: #28a745;#}
+{#            font-weight: bold;#}
+{#        }#}
+{##}
+{#    </style>#}
+{#</head>#}
+{#<body>#}
+{##}
+{#<div class="container">#}
+{#    <h2>Submit Complaint</h2>#}
+{##}
+{#    <!-- Complaint Form -->#}
+{#    <form method="post">#}
+{#        {% csrf_token %}#}
+{#        <div class="form-group">#}
+{#            <label for="complaint">Your Complaint:</label>#}
+{#            <textarea name="complaint_text" id="complaint" placeholder="Describe your issue..."></textarea>#}
+{#        </div>#}
+{##}
+{#        <button class="btn-submit" type="submit">Send Complaint</button>#}
+{#    </form>#}
+{#</div>#}
+{##}
+{#<div class="container">#}
+{#    <h2>Your Complaints & Replies</h2>#}
+{##}
+{#    <table class="complaint-table">#}
+{#        <tr>#}
+{#            <th>Complaint</th>#}
+{#            <th>Date</th>#}
+{#            <th>Reply</th>#}
+{#        </tr>#}
+{#        {% for c in complaints %}#}
+{#        <tr>#}
+{#            <td>{{ c.Complaint_text }}</td>#}
+{#            <td>{{ c.Date }}</td>#}
+{#            <td>{{ c.Reply }}</td>#}
+{#        </tr>#}
+{#        {% endfor %}#}
+{##}
+{##}
+{##}
+{#        <!-- For Django, replace above rows with:-->#}
+{#        {% for c in complaints %}#}
+{#        <tr>#}
+{#            <td>{{ c.text }}</td>#}
+{#            <td>{{ c.date }}</td>#}
+{#            <td>{{ c.reply|default:"---" }}</td>#}
+{#            <td>#}
+{#                {% if c.reply %}#}
+{#                    <span class="status-replied">Replied</span>#}
+{#                {% else %}#}
+{#                    <span class="status-pending">Pending</span>#}
+{#                {% endif %}#}
+{#            </td>#}
+{#        </tr>#}
+{#        {% endfor %}#}
+{##}
+{#    </table>#}
+{#</div>#}
+{##}
+{#</body>#}
+{#</html>#}
+{% load static %}
+{% include 'doctor_header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaints - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --info-color: #3B82F6;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            padding-top: 70px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--white);
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        .btn-back {
+            padding: 0.8rem 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            color: var(--dark-text);
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        /* Main Container */
+        .complaints-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 2rem;
+        }
+
+        /* Submit Complaint Card */
+        .submit-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .submit-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+
+        .card-title h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .card-title p {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            font-size: 0.95rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .form-group label i {
+            color: var(--secondary-color);
+        }
+
+        .form-group textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--white);
+            color: var(--dark-text);
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 4px rgba(29, 122, 140, 0.1);
+        }
+
+        .form-group textarea::placeholder {
+            color: var(--light-text);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient-1);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.4);
+        }
+
+        /* Complaints List Card */
+        .complaints-list-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Complaint Items */
+        .complaints-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .complaint-item {
+            background: var(--light-bg);
+            border-radius: 16px;
+            padding: 1.8rem;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--warning-color);
+        }
+
+        .complaint-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .complaint-item.replied {
+            border-left-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.03);
+        }
+
+        .complaint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.2rem;
+        }
+
+        .complaint-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--light-text);
+            font-size: 0.85rem;
+        }
+
+        .status-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-badge.replied {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .complaint-text {
+            background: var(--white);
+            padding: 1.2rem;
+            border-radius: 12px;
+            line-height: 1.7;
+            color: var(--dark-text);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .reply-section {
+            background: rgba(16, 185, 129, 0.05);
+            padding: 1.2rem;
+            border-radius: 12px;
+            border-left: 3px solid var(--success-color);
+        }
+
+        .reply-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--success-color);
+            text-transform: uppercase;
+            margin-bottom: 0.6rem;
+        }
+
+        .reply-text {
+            color: var(--dark-text);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--light-text);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        /* Messages */
+        .message {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            border: 2px solid var(--success-color);
+        }
+
+        .message i {
+            font-size: 1.5rem;
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 1.5rem 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .page-title h1 {
+                font-size: 1.6rem;
+            }
+
+            .complaints-container {
+                padding: 0 1rem 1rem;
+            }
+
+            .submit-card,
+            .complaints-list-card {
+                padding: 1.5rem;
+            }
+
+            .complaint-header {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-container">
+            <div class="header-content">
+                <div class="page-title">
+                    <h1>Complaints</h1>
+                    <p class="page-subtitle">Submit and track your complaints</p>
+                </div>
+                <a href="/doctor_index" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="complaints-container">
+        <!-- Success Message -->
+        {% if messages %}
+            {% for message in messages %}
+            <div class="message success">
+                <i class="fas fa-check-circle"></i>
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Submit Complaint Form -->
+        <div class="submit-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="card-title">
+                    <h2>Submit a Complaint</h2>
+                    <p>Let us know about any issues you're facing</p>
+                </div>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="complaint">
+                        <i class="fas fa-pen"></i>
+                        Describe Your Issue
+                    </label>
+                    <textarea
+                        name="complaint_text"
+                        id="complaint"
+                        placeholder="Please provide detailed information about your complaint..."
+                        required
+                    ></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-paper-plane"></i>
+                    Submit Complaint
+                </button>
+            </form>
+        </div>
+
+        <!-- Complaints List -->
+        <div class="complaints-list-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-list-alt"></i>
+                </div>
+                <div class="card-title">
+                    <h2>Your Complaints & Replies</h2>
+                    <p>Track the status of your submitted complaints</p>
+                </div>
+            </div>
+
+            {% if complaints %}
+            <div class="complaints-list">
+                {% for c in complaints %}
+                <div class="complaint-item {% if c.Reply != 'pending' %}replied{% endif %}">
+                    <div class="complaint-header">
+                        <div class="complaint-date">
+                            <i class="fas fa-calendar-alt"></i>
+                            {{ c.Date|date:"M d, Y" }}
+                        </div>
+                        <span class="status-badge {% if c.Reply == 'pending' %}pending{% else %}replied{% endif %}">
+                            {% if c.Reply == 'pending' %}
+                            <i class="fas fa-clock"></i>
+                            Pending
+                            {% else %}
+                            <i class="fas fa-check-circle"></i>
+                            Replied
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="complaint-text">
+                        {{ c.Complaint_text }}
+                    </div>
+
+                    {% if c.Reply != 'pending' %}
+                    <div class="reply-section">
+                        <div class="reply-label">
+                            <i class="fas fa-reply"></i>
+                            Admin Reply
+                        </div>
+                        <div class="reply-text">
+                            {{ c.Reply }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h3>No Complaints Yet</h3>
+                <p>You haven't submitted any complaints</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Auto-hide messages after 5 seconds
+        const messages = document.querySelectorAll('.message');
+        if (messages.length > 0) {
+            messages.forEach(message => {
+                setTimeout(() => {
+                    message.style.animation = 'slideDown 0.3s ease-out reverse';
+                    setTimeout(() => {
+                        message.remove();
+                    }, 300);
+                }, 5000);
+            });
+        }
+
+        // Animate complaint items
+        const complaintItems = document.querySelectorAll('.complaint-item');
+        if (complaintItems.length > 0) {
+            complaintItems.forEach((item, index) => {
+                item.style.animation = `slideUp 0.5s ease-out ${index * 0.05}s backwards`;
+            });
+        }
+    </script>
+</body>
+</html>

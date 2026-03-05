@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .hero-section,
+        .cta-section {
+            overflow: hidden;
+        }
+
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+            --gradient-2: linear-gradient(135deg, #F28F3B 0%, #FF6B35 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: var(--gradient-1);
+            padding: 4rem 0 3rem;
+            position: relative;
+            overflow: hidden;
+            margin-top: 70px;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.5;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .btn-hero {
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .btn-primary-hero {
+            background: var(--gradient-2);
+            color: var(--white);
+            border: none;
+            box-shadow: 0 8px 25px rgba(242, 143, 59, 0.4);
+        }
+
+        .btn-primary-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(242, 143, 59, 0.5);
+        }
+
+        .btn-secondary-hero {
+            background: var(--white);
+            color: var(--primary-color);
+            border: none;
+        }
+
+        .btn-secondary-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+
+        .stat-text h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .stat-text p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(29, 122, 140, 0.1);
+            color: var(--secondary-color);
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--light-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--light-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--light-text);
+            line-height: 1.7;
+        }
+
+        /* Quick Actions */
+        .quick-actions-section {
+            padding: 5rem 0;
+            background: var(--light-bg);
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .action-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--secondary-color);
+        }
+
+        .action-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 8px 25px rgba(242, 143, 59, 0.3);
+        }
+
+        .action-card h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .action-card p {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works */
+        .how-it-works-section {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .step-item {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 8px 25px rgba(10, 46, 92, 0.3);
+        }
+
+        .step-item h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .step-item p {
+            color: var(--light-text);
+            line-height: 1.7;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 5rem 0;
+            background: var(--gradient-1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .cta-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-content h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                margin-top: 60px;
+            }
+
+            .hero-section {
+                padding: 3rem 0 2rem;
+            }
+
+            .hero-container {
+                padding: 0 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn-hero {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .features-grid,
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% load static %}
+    {% include 'user_header.html' %}
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                {% if user.is_authenticated %}
+                <h1>Welcome, {{ user_name }}!</h1>
+                <p>Track your skin health journey and connect with our experts.</p>
+                {% else %}
+                <h1>Your Skin Health, Powered by AI</h1>
+                <p>Get instant AI-powered skin analysis and connect with certified dermatologists for professional care.
+                    Your journey to healthier skin starts here.</p>
+                {% endif %}
+
+                <div class="hero-buttons">
+                    <a href="{% url 'skin_prediction' %}" class="btn-hero btn-primary-hero">
+                        <i class="fas fa-microscope"></i>
+                        Analyze Your Skin
+                    </a>
+                    <a href="{% url 'view_doctors' %}" class="btn-hero btn-secondary-hero">
+                        <i class="fas fa-user-md"></i>
+                        Find a Doctor
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-text">
+                            <h3>{{ patient_count|default:"500+" }}</h3>
+                            <p>Happy Patients</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="stat-text">
+                            <h3>{{ doctor_count|default:"20+" }}</h3>
+                            <p>Expert Doctors</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=700&fit=crop"
+                    alt="Healthcare Professional">
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    {% if user.is_authenticated %}
+    {% if upcoming_appointments or recent_scans %}
+    <section class="dashboard-section">
+        <div class="section-container">
+            <div class="section-header" style="margin-bottom: 3rem; text-align: left;">
+                <span class="section-badge">Your Dashboard</span>
+                <h2 style="margin-bottom: 0;">At a Glance</h2>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Upcoming Appointment -->
+                {% if upcoming_appointments %}
+                <div class="dashboard-card appointment-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-calendar-alt"></i> Next Appointment
+                    </h3>
+                    {% for appt in upcoming_appointments %}
+                    <div class="appt-item">
+                        <div class="appt-date-box">
+                            <span class="date-text">{{ appt.date }}</span>
+                        </div>
+                        <div class="appt-details">
+                            <h4>Dr. {{ appt.shedule_id.DOCTOR_ID.name }}</h4>
+                            <p class="time-text"><i class="far fa-clock"></i> {{ appt.shedule_id.start_time }} - {{
+                                appt.shedule_id.end_time }}</p>
+                            <span class="token-badge">Token #{{ appt.token_number }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <a href="{% url 'view_bookings' %}" class="btn-link">
+                        View All Appointments <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                {% endif %}
+
+                <!-- Recent Scans -->
+                {% if recent_scans %}
+                <div class="dashboard-card scan-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-history"></i> Recent Analyses
+                    </h3>
+                    <div class="scan-list">
+                        {% for scan in recent_scans %}
+                        <div class="scan-item">
+                            <div class="scan-info">
+                                <span class="scan-label">{{ scan.label }}</span>
+                                <span class="scan-conf">Confidence: {{ scan.confidence }}%</span>
+                            </div>
+                            <span class="scan-date">{{ scan.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <a href="{% url 'skin_prediction' %}" class="btn-link">
+                        New Analysis <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .dashboard-section {
+            padding: 4rem 0;
+            background: var(--white);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .dashboard-card {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .card-title i {
+            color: var(--secondary-color);
+        }
+
+        .appt-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            background: var(--white);
+            padding: 1.2rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .appt-date-box {
+            background: var(--gradient-1);
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .date-text {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .appt-details h4 {
+            margin: 0 0 0.4rem;
+            color: var(--dark-text);
+            font-size: 1.1rem;
+        }
+
+        .time-text {
+            margin: 0 0 0.6rem;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        .token-badge {
+            display: inline-block;
+            background: rgba(242, 143, 59, 0.15);
+            color: var(--accent-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .scan-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .scan-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--white);
+            padding: 1.2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .scan-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .scan-label {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .scan-conf {
+            font-size: 0.85rem;
+            color: var(--success-color);
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            align-self: flex-start;
+        }
+
+        .scan-date {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .btn-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary-color);
+            font-weight: 700;
+            text-decoration: none;
+            margin-top: 1rem;
+            transition: gap 0.3s ease;
+        }
+
+        .btn-link:hover {
+            gap: 0.8rem;
+        }
+    </style>
+    {% endif %}
+    {% endif %}
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge">Why Choose DermaScan AI</span>
+                <h2>Advanced Skin Care Solutions</h2>
+                <p>Combining cutting-edge AI technology with professional dermatology expertise</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Analysis</h3>
+                    <p>Get instant skin condition analysis using advanced artificial intelligence trained on thousands
+                        of dermatological cases.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <h3>Certified Dermatologists</h3>
+                    <p>Connect with board-certified dermatologists for professional consultations and personalized
+                        treatment plans.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure & Private</h3>
+                    <p>Your health data is protected with end-to-end encryption and HIPAA-compliant security measures.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>24/7 Accessibility</h3>
+                    <p>Access our AI analysis and chatbot assistance anytime, anywhere from your mobile device or
+                        computer.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Track Progress</h3>
+                    <p>Monitor your skin health journey with detailed tracking and receive personalized recommendations.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+    <div class="feature-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <line x1="9" y1="10" x2="9" y2="10"/>
+            <line x1="12" y1="10" x2="12" y2="10"/>
+            <line x1="15" y1="10" x2="15" y2="10"/>
+        </svg>
+    </div>
+    <h3>Chat Consultations</h3>
+    <p>Message your dermatologist directly through our secure chat system and get expert advice from the comfort of your home.</p>
+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions Section -->
+    <section class="quick-actions-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge">Get Started</span>
+                <h2>Quick Access</h2>
+                <p>Everything you need for better skin health in one place</p>
+            </div>
+
+            <div class="actions-grid">
+                <a href="/skin-predict/" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h3>Skin Analysis</h3>
+                    <p>Upload a photo for instant AI analysis</p>
+                </a>
+
+                <a href="/view_doctors/" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>Find Doctors</h3>
+                    <p>Browse certified dermatologists</p>
+                </a>
+
+                <a href="/view_bookings/" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>My Appointments</h3>
+                    <p>View and manage your bookings</p>
+                </a>
+
+                <a href="/skin_chatbot/" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>AI Chatbot</h3>
+                    <p>Get instant answers to your questions</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge">Simple Process</span>
+                <h2>How It Works</h2>
+                <p>Get professional skin care in three easy steps</p>
+            </div>
+
+            <div class="steps-container">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <h3>Analyze Your Skin</h3>
+                    <p>Upload a photo of your skin concern and get instant AI-powered analysis with detailed insights.
+                    </p>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <h3>Consult a Doctor</h3>
+                    <p>Book an appointment with a certified dermatologist for professional advice and treatment plans.
+                    </p>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <h3>Track Your Progress</h3>
+                    <p>Follow your treatment plan, track improvements, and stay connected with your healthcare provider.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="section-container">
+            <div class="cta-content">
+                <h2>Ready to Start Your Skin Health Journey?</h2>
+                <p>Join thousands of satisfied patients who trust DermaScan AI for their skin care needs</p>
+                <div class="hero-buttons">
+                    <a href="/skin-predict/" class="btn-hero btn-primary-hero">
+                        <i class="fas fa-rocket"></i>
+                        Get Started Now
+                    </a>
+                    <a href="/view_doctors/" class="btn-hero btn-secondary-hero">
+                        <i class="fas fa-calendar-alt"></i>
+                        Book Appointment
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+</body>
+
+</html>

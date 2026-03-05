@@ -1,0 +1,625 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --info-color: #3B82F6;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--gradient-1);
+            padding: 4rem 2rem 3rem;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
+            line-height: 1.8;
+        }
+
+        /* Stats Summary */
+        .stats-summary {
+            max-width: 1400px;
+            margin: -3rem auto 2rem;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--info-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card.pending {
+            border-left-color: var(--warning-color);
+        }
+
+        .stat-card.approved {
+            border-left-color: var(--success-color);
+        }
+
+        .stat-card.paid {
+            border-left-color: var(--info-color);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        /* Bookings Section */
+        .bookings-section {
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .bookings-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .card-title h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* Booking Items */
+        .bookings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .booking-item {
+            background: var(--light-bg);
+            border-radius: 16px;
+            padding: 1.8rem;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--warning-color);
+        }
+
+        .booking-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .booking-item.approved {
+            border-left-color: var(--success-color);
+        }
+
+        .booking-item.paid {
+            border-left-color: var(--info-color);
+        }
+
+        .booking-item.rejected {
+            border-left-color: var(--danger-color);
+            opacity: 0.7;
+        }
+
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .doctor-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .doctor-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .doctor-details h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .doctor-specialty {
+            font-size: 0.85rem;
+            color: var(--light-text);
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-badge.approved {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-badge.paid {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info-color);
+        }
+
+        .status-badge.rejected {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .booking-info {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-item i {
+            color: var(--secondary-color);
+        }
+
+        .info-item span {
+            font-size: 0.95rem;
+            color: var(--dark-text);
+            font-weight: 600;
+        }
+
+        .booking-actions {
+            display: flex;
+            gap: 0.8rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .action-btn.pay {
+            background: var(--gradient-1);
+            color: var(--white);
+        }
+
+        .action-btn.pay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .action-btn.chat {
+            background: var(--info-color);
+            color: var(--white);
+        }
+
+        .action-btn.chat:hover {
+            background: #2563EB;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.rating {
+            background: var(--success-color);
+            color: var(--white);
+        }
+
+        .action-btn.rating:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.view-rating {
+            background: var(--warning-color);
+            color: var(--white);
+        }
+
+        .action-btn.view-rating:hover {
+            background: #D97706;
+            transform: translateY(-2px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--light-text);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 3rem 1rem 2rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-summary,
+            .bookings-section {
+                padding: 0 1rem;
+            }
+
+            .bookings-card {
+                padding: 1.5rem;
+            }
+
+            .booking-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .booking-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .booking-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .chat-badge {
+            background-color: #ef4444;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 99px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'user_header.html' %}
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-container">
+            <span class="page-badge">
+                <i class="fas fa-calendar-check"></i>
+                My Appointments
+            </span>
+            <h1>My Bookings</h1>
+            <p>View and manage all your scheduled appointments with our doctors.</p>
+        </div>
+    </section>
+
+    <!-- Stats Summary -->
+    <div class="stats-summary">
+        <div class="stat-card pending">
+            <div class="stat-label">Pending</div>
+            <div class="stat-value">{{ pending_count|default:"0" }}</div>
+        </div>
+        <div class="stat-card approved">
+            <div class="stat-label">Approved</div>
+            <div class="stat-value">{{ approved_count|default:"0" }}</div>
+        </div>
+        <div class="stat-card paid">
+            <div class="stat-label">Paid</div>
+            <div class="stat-value">{{ paid_count|default:"0" }}</div>
+        </div>
+    </div>
+
+    <!-- Bookings Section -->
+    <section class="bookings-section">
+        <div class="bookings-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <h2>All Appointments</h2>
+                </div>
+            </div>
+
+            {% if bookings %}
+            <div class="bookings-list">
+                {% for b in bookings %}
+                <div class="booking-item {{ b.status }}">
+                    <div class="booking-header">
+                        <div class="doctor-info">
+                            <div class="doctor-avatar">
+                                {{ b.shedule_id.DOCTOR_ID.name|slice:":2"|upper }}
+                            </div>
+                            <div class="doctor-details">
+                                <h3>Dr. {{ b.shedule_id.DOCTOR_ID.name }}</h3>
+                                <p class="doctor-specialty">Dermatologist</p>
+                            </div>
+                        </div>
+                        <span class="status-badge {{ b.status }}">
+                            {% if b.status == 'pending' %}
+                            <i class="fas fa-clock"></i>
+                            Pending
+                            {% elif b.status == 'approved' %}
+                            <i class="fas fa-check-circle"></i>
+                            Approved
+                            {% elif b.status == 'paid' %}
+                            <i class="fas fa-check-double"></i>
+                            Paid
+                            {% elif b.status == 'rejected' %}
+                            <i class="fas fa-times-circle"></i>
+                            Rejected
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="booking-info">
+                        <div class="info-item">
+                            <i class="fas fa-calendar-day"></i>
+                            <span>{{ b.date }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-ticket-alt" style="color: var(--accent-color);"></i>
+                            <span style="color: var(--accent-color); font-weight: 700;">
+                                Token: #
+                                {% if b.token_number %}
+                                {{ b.token_number }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>{{ b.shedule_id.start_time }} - {{ b.shedule_id.end_time }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-rupee-sign"></i>
+                            <span>₹{{ b.shedule_id.fees }}</span>
+                        </div>
+                    </div>
+
+                    <div class="booking-actions">
+                        {% if b.status == "approved" %}
+                        <a href="{% url 'pay_now' b.id %}" class="action-btn pay">
+                            <i class="fas fa-credit-card"></i>
+                            Pay Now
+                        </a>
+                        {% elif b.status == 'paid' %}
+                        {% if b.shedule_id.DOCTOR_ID.USER_ID.id %}
+                        <a href="{% url 'user_doctor_chat' b.shedule_id.DOCTOR_ID.USER_ID.id %}"
+                            class="action-btn chat">
+                            <i class="fas fa-comments"></i>
+                            Chat with Doctor
+                            {% if b.unread_count > 0 %}
+                            <span class="chat-badge">{{ b.unread_count }}</span>
+                            {% endif %}
+                        </a>
+                        {% else %}
+                        <span class="action-btn chat disabled" style="opacity: 0.5; pointer-events: none;">Chat
+                            Unavailable</span>
+                        {% endif %}
+                        <a href="{% url 'add_rating' b.shedule_id.DOCTOR_ID.id %}" class="action-btn rating">
+                            <i class="fas fa-star"></i>
+                            Add Rating
+                        </a>
+                        <a href="{% url 'user_view_rating' b.shedule_id.DOCTOR_ID.id %}" class="action-btn view-rating">
+                            <i class="fas fa-eye"></i>
+                            View Rating
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <h3>No Bookings Yet</h3>
+                <p>You haven't made any appointments yet. Browse our doctors to get started.</p>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script>
+        // Animate booking items
+        const bookingItems = document.querySelectorAll('.booking-item');
+        if (bookingItems.length > 0) {
+            bookingItems.forEach((item, index) => {
+                item.style.animation = `slideUp 0.5s ease-out ${index * 0.1}s backwards`;
+            });
+        }
+
+        // Animate stat cards
+        const statCards = document.querySelectorAll('.stat-card');
+        if (statCards.length > 0) {
+            statCards.forEach((card, index) => {
+                card.style.animation = `slideUp 0.5s ease-out ${index * 0.05}s backwards`;
+            });
+        }
+    </script>
+</body>
+
+</html>

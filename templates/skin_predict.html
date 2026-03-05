@@ -1,0 +1,1155 @@
+{#{% include 'user_header.html' %}#}
+{#<br><br><br>#}
+{#
+<!DOCTYPE html>#}
+{#<html>#}
+{#
+
+<head>#}
+    {# <title>Skin Disease Prediction</title>#}
+    {# <style>
+        #
+        }
+
+            {
+            # body {
+                #
+            }
+
+                {
+                # font-family: Arial;
+                #
+            }
+
+                {
+                # background: #f4f6f8;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # .box {
+                #
+            }
+
+                {
+                # width: 400px;
+                #
+            }
+
+                {
+                # margin: 50px auto;
+                #
+            }
+
+                {
+                # background: white;
+                #
+            }
+
+                {
+                # padding: 20px;
+                #
+            }
+
+                {
+                # border-radius: 10px;
+                #
+            }
+
+                {
+                # box-shadow: 0px 0px 10px #ccc;
+                #
+            }
+
+                {
+                # text-align: center;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # button {
+                #
+            }
+
+                {
+                # background: #27ae60;
+                #
+            }
+
+                {
+                # color: white;
+                #
+            }
+
+                {
+                # border: none;
+                #
+            }
+
+                {
+                # padding: 10px 20px;
+                #
+            }
+
+                {
+                # border-radius: 5px;
+                #
+            }
+
+                {
+                # cursor: pointer;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # img {
+                #
+            }
+
+                {
+                # max-width: 100%;
+                #
+            }
+
+                {
+                # margin-top: 15px;
+                #
+            }
+
+                {
+                # border-radius: 8px;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # .error {
+                #
+            }
+
+                {
+                # color: red;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            #
+    </style>#}
+    {#</head>#}
+{##}
+{#
+
+<body>#}
+    {##}
+    {#<div class="box">#}
+        {# <h2>Upload Skin Image</h2>#}
+        {##}
+        {# <form method="POST" enctype="multipart/form-data">#}
+            {# {% csrf_token %}#}
+            {# <input type="file" name="image" required><br><br>#}
+            {# <button type="submit">Predict</button>#}
+            {# </form>#}
+        {##}
+        {# {% if image_url %}#}
+        {# <img src="{{ image_url }}">#}
+        {# <h3>Prediction: {{ label }}</h3>#}
+        {# <p>Confidence: {{ confidence }}%</p>#}
+        {# {% endif %}#}
+        {##}
+        {# {% if error %}#}
+        {# <p class="error">{{ error }}</p>#}
+        {# {% endif %}#}
+        {#</div>#}
+    {##}
+    {#</body>#}
+{#
+
+</html>#}
+{##}
+{#{% include 'footer.html' %}#}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Skin Analysis - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+            --gradient-2: linear-gradient(135deg, #F28F3B 0%, #FF6B35 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--gradient-1);
+            padding: 4rem 2rem 3rem;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        }
+
+        .header-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .page-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            color: var(--white);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .page-header h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Prediction Section */
+        .prediction-section {
+            max-width: 1000px;
+            margin: -3rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .prediction-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Info Banner */
+        .info-banner {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3B82F6;
+            padding: 1.2rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .info-banner i {
+            font-size: 1.5rem;
+            color: #3B82F6;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+        }
+
+        .info-banner-content p {
+            color: var(--dark-text);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 3px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            background: var(--light-bg);
+        }
+
+        .upload-area:hover {
+            border-color: var(--secondary-color);
+            background: rgba(29, 122, 140, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--accent-color);
+            background: rgba(242, 143, 59, 0.1);
+        }
+
+        .upload-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(29, 122, 140, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+        }
+
+        .upload-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-subtitle {
+            color: var(--light-text);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .btn-browse {
+            padding: 1rem 2rem;
+            background: var(--gradient-1);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .btn-browse:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.4);
+        }
+
+        /* Preview Area */
+        .preview-area {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .preview-area.active {
+            display: block;
+        }
+
+        .image-preview {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            background: var(--danger-color);
+            border: none;
+            border-radius: 50%;
+            color: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .remove-image:hover {
+            background: #DC2626;
+            transform: scale(1.1);
+        }
+
+        .btn-predict {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--gradient-2);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            box-shadow: 0 4px 15px rgba(242, 143, 59, 0.3);
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(242, 143, 59, 0.4);
+        }
+
+        .btn-predict:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--light-bg);
+            border-top-color: var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Results Area */
+        .results-area {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .results-area.active {
+            display: block;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            background: var(--gradient-1);
+            padding: 2rem;
+            border-radius: 16px 16px 0 0;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .result-header h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .result-body {
+            padding: 2rem;
+            background: var(--light-bg);
+            border-radius: 0 0 16px 16px;
+        }
+
+        .prediction-label {
+            text-align: center;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .label-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        .label-value {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .confidence-meter {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+
+        .confidence-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .confidence-label h4 {
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        .confidence-value {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success-color);
+        }
+
+        .confidence-bar {
+            height: 20px;
+            background: var(--light-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            transition: width 1s ease-out;
+        }
+
+        .result-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn-new {
+            background: var(--gradient-1);
+            color: var(--white);
+        }
+
+        .btn-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .btn-consult {
+            background: var(--accent-color);
+            color: var(--white);
+        }
+
+        .btn-consult:hover {
+            background: #E07A2A;
+            transform: translateY(-2px);
+        }
+
+        .details-card {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: var(--white);
+            border: 1px solid var(--border-color);
+        }
+
+        .details-card h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .details-overview {
+            color: var(--dark-text);
+            opacity: 0.9;
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .details-section {
+            background: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .details-section h4 {
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        .details-section ul {
+            margin: 0;
+            padding-left: 1.25rem;
+        }
+
+        .details-section li {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+            color: var(--dark-text);
+            opacity: 0.9;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--danger-color);
+            padding: 1.2rem 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .error-message i {
+            font-size: 1.5rem;
+            color: var(--danger-color);
+            flex-shrink: 0;
+        }
+
+        .error-message p {
+            color: var(--danger-color);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Prediction History */
+        .history-panel {
+            margin-top: 2.5rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+        }
+
+        .history-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .history-header h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .history-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .history-item {
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            background: var(--light-bg);
+            overflow: hidden;
+            display: flex;
+            gap: 0.9rem;
+            padding: 0.9rem;
+        }
+
+        .history-thumb {
+            width: 84px;
+            height: 84px;
+            border-radius: 12px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: #fff;
+        }
+
+        .history-meta {
+            min-width: 0;
+        }
+
+        .history-label {
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .history-sub {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 3rem 1rem 2rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .prediction-section {
+                padding: 0 1rem;
+                margin: -2rem auto 2rem;
+            }
+
+            .prediction-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .upload-area {
+                padding: 2rem 1rem;
+            }
+
+            .result-actions {
+                flex-direction: column;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .history-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'user_header.html' %}
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-container">
+            <div class="page-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h1>AI Skin Analysis</h1>
+            <p>Upload an image for instant AI-powered skin condition analysis with 98% accuracy</p>
+        </div>
+    </section>
+
+    <!-- Prediction Section -->
+    <section class="prediction-section">
+        <div class="prediction-card">
+            <!-- Info Banner -->
+            <div class="info-banner">
+                <i class="fas fa-info-circle"></i>
+                <div class="info-banner-content">
+                    <p><strong>How it works:</strong> Our AI analyzes your image and provides a preliminary assessment.
+                        For accurate diagnosis and treatment, please consult with our certified dermatologists.</p>
+                </div>
+            </div>
+
+            <!-- Upload Form -->
+            <form method="POST" enctype="multipart/form-data" id="predictionForm">
+                {% csrf_token %}
+
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3 class="upload-title">Upload Skin Image</h3>
+                    <p class="upload-subtitle">Drag and drop or click to browse</p>
+                    <input type="file" name="image" id="fileInput" class="file-input" accept="image/*" required>
+                    <button type="button" class="btn-browse" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-folder-open"></i>
+                        Browse Files
+                    </button>
+                </div>
+                <!-- Photo Tips -->
+            <div class="photo-tips"
+                style="margin-bottom: 2.5rem; background: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+                <h4
+                    style="margin-bottom: 1rem; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-lightbulb" style="color: var(--warning-color);"></i>
+                    Tips for Higher Accuracy
+                </h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="display: flex; gap: 0.75rem; font-size: 0.9rem;">
+                        <i class="fas fa-sun" style="color: var(--warning-color); margin-top: 0.2rem;"></i>
+                        <span><strong>Good Lighting:</strong> Take photos in bright, natural light for best
+                            results.</span>
+                    </div>
+                    <div style="display: flex; gap: 0.75rem; font-size: 0.9rem;">
+                        <i class="fas fa-expand-arrows-alt"
+                            style="color: var(--secondary-color); margin-top: 0.2rem;"></i>
+                        <span><strong>Focus:</strong> Ensure the skin lesion is in sharp focus and centered.</span>
+                    </div>
+                    <div style="display: flex; gap: 0.75rem; font-size: 0.9rem;">
+                        <i class="fas fa-camera" style="color: var(--primary-color); margin-top: 0.2rem;"></i>
+                        <span><strong>Close-up:</strong> Take the photo from a distance of 4-6 inches.</span>
+                    </div>
+                    <div style="display: flex; gap: 0.75rem; font-size: 0.9rem;">
+                        <i class="fas fa-hand-sparkles" style="color: var(--success-color); margin-top: 0.2rem;"></i>
+                        <span><strong>Clean Skin:</strong> Ensure the area is clean and free of creams or dirt.</span>
+                    </div>
+                </div>
+            </div>
+
+                <!-- Preview Area -->
+                <div class="preview-area" id="previewArea">
+                    <div class="image-preview">
+                        <img id="previewImage" class="preview-image" alt="Preview">
+                        <button type="button" class="remove-image" id="removeImage">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <button type="submit" class="btn-predict" id="predictBtn">
+                        <i class="fas fa-microscope"></i>
+                        Analyze Image
+                    </button>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div class="loading-spinner" id="loadingSpinner">
+                    <div class="spinner"></div>
+                    <p>Analyzing your image...</p>
+                </div>
+            </form>
+
+            <!-- Results Area -->
+            {% if image_url %}
+            <div class="results-area active">
+                <div class="result-header">
+                    <h3>Analysis Complete</h3>
+                    <p>Here are the results of your skin analysis</p>
+                </div>
+                <div class="result-body">
+                    <div class="prediction-label" {% if is_uncertain %}style="border: 2px solid var(--warning-color);"{% endif %}>
+                        <div class="label-title">Detected Condition</div>
+                        <div class="label-value" {% if is_uncertain %}style="color: var(--warning-color);" {% endif %}>
+                            {% if is_uncertain %}
+                            <i class="fas fa-question-circle"></i>
+                            {% endif %}
+                            {{ label }}
+                        </div>
+                    </div>
+
+                    <div class="confidence-meter">
+                        <div class="confidence-label">
+                            <h4>Confidence Level</h4>
+                            <span class="confidence-value" {% if is_uncertain %}style="color: var(--warning-color);"{% endif %}>{{ confidence }}%</span>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: {{ confidence }}%; {% if is_uncertain %}background: var(--warning-color);{% endif %}">
+                            </div>
+                        </div>
+                        {% if is_uncertain %}
+                        <p
+                            style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--light-text); font-style: italic;">
+                            Note: Low confidence results often indicate healthy skin, poor photo quality, or an
+                            unrecognized object.
+                        </p>
+                        {% endif %}
+                    </div>
+
+                    {% if disease_info %}
+                    <div class="details-card">
+                        <h3>{{ disease_info.title }}</h3>
+                        <div class="details-overview">{{ disease_info.overview }}</div>
+
+                        <div class="details-grid">
+                            <div class="details-section">
+                                <h4>{% if is_uncertain %}Observations{% else %}Symptoms{% endif %}</h4>
+                                <ul>
+                                    {% for item in disease_info.symptoms %}
+                                    <li>{{ item }}</li>
+                                    {% empty %}
+                                    <li>No details available.</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <div class="details-section">
+                                <h4>{% if is_uncertain %}Suggested Actions{% else %}Home Care / Remedies{% endif %}</h4>
+                                <ul>
+                                    {% for item in disease_info.remedies %}
+                                    <li>{{ item }}</li>
+                                    {% empty %}
+                                    <li>No details available.</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <div class="details-section">
+                                <h4>{% if is_uncertain %}Important Notes{% else %}Precautions{% endif %}</h4>
+                                <ul>
+                                    {% for item in disease_info.precautions %}
+                                    <li>{{ item }}</li>
+                                    {% empty %}
+                                    <li>Please consult a dermatologist for professional guidance.</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="result-actions">
+                        <button type="button" class="btn-action btn-new"
+                            onclick="window.location.href='{% url 'skin_prediction' %}'">
+                            <i class="fas fa-redo"></i>
+                            New Analysis
+                        </button>
+                        <button type="button" class="btn-action btn-consult"
+                            onclick="window.location.href='/view_doctors/'">
+                            <i class="fas fa-user-md"></i>
+                            Consult Doctor
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Error Message -->
+            {% if error %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Prediction History -->
+            <div class="history-panel">
+                <div class="history-header">
+                    <h3>Previous Analyses</h3>
+                </div>
+
+                {% if history %}
+                <div class="history-list">
+                    {% for item in history %}
+                    <div class="history-item">
+                        <img class="history-thumb" src="{{ item.image_url }}" alt="Previous scan">
+                        <div class="history-meta">
+                            <div class="history-label">{{ item.label }}</div>
+                            <div class="history-sub">Confidence: {{ item.confidence }}%</div>
+                            <div class="history-sub">{{ item.created_at }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="history-sub">No previous analyses yet. Upload an image to create your first record.</div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const previewArea = document.getElementById('previewArea');
+        const previewImage = document.getElementById('previewImage');
+        const removeImage = document.getElementById('removeImage');
+        const predictionForm = document.getElementById('predictionForm');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        // File input change
+        fileInput.addEventListener('change', function (e) {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                    uploadArea.style.display = 'none';
+                    previewArea.classList.add('active');
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // Remove image
+        removeImage.addEventListener('click', function () {
+            fileInput.value = '';
+            previewImage.src = '';
+            uploadArea.style.display = 'block';
+            previewArea.classList.remove('active');
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', function (e) {
+            this.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function (e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // Form submit
+        predictionForm.addEventListener('submit', function () {
+            previewArea.style.display = 'none';
+            loadingSpinner.classList.add('active');
+        });
+    </script>
+</body>
+
+</html>

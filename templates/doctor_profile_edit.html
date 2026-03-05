@@ -1,0 +1,599 @@
+﻿{% include 'doctor_header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --info-color: #3B82F6;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+            --gradient-2: linear-gradient(135deg, #F28F3B 0%, #FF6B35 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            padding-top: 70px;
+            min-height: 100vh;
+        }
+
+        /* ========== HERO SECTION ========== */
+        .edit-hero {
+            background: var(--gradient-1);
+            padding: 3rem 2rem 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .edit-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        }
+
+        .hero-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: var(--white);
+        }
+
+        .hero-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* ========== FORM CONTAINER ========== */
+        .form-container {
+            max-width: 800px;
+            margin: -3rem auto 2rem;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Section Headers */
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .form-grid.single {
+            grid-template-columns: 1fr;
+        }
+
+        /* Form Groups */
+        .form-group {
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-label i {
+            margin-right: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-text);
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            color: var(--dark-text);
+            background: var(--light-bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .readonly-display {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            color: var(--light-text);
+            background: rgba(107, 114, 128, 0.05);
+            border: 2px solid rgba(107, 114, 128, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            cursor: not-allowed;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            background: var(--white);
+            border-color: var(--secondary-color);
+            box-shadow: 0 4px 15px rgba(29, 122, 140, 0.15);
+        }
+
+        .form-input:focus+i,
+        .form-textarea:focus+i {
+            color: var(--secondary-color);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            padding-top: 1rem;
+        }
+
+        .input-wrapper.textarea i {
+            top: 1.2rem;
+            transform: none;
+        }
+
+        /* Input Hint */
+        .input-hint {
+            font-size: 0.8rem;
+            color: var(--light-text);
+            margin-top: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Action Buttons */
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--light-bg);
+        }
+
+        .btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 1rem 2rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(10, 46, 92, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--light-bg);
+            color: var(--dark-text);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 1.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid var(--success-color);
+            border-radius: 12px;
+            color: var(--success-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .success-message.show {
+            display: flex;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .edit-hero {
+                padding: 2.5rem 1rem 4rem;
+            }
+
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .form-container {
+                padding: 0 1rem;
+            }
+
+            .form-card {
+                padding: 1.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .avatar-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-card {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .form-group {
+            animation: slideUp 0.4s ease-out backwards;
+        }
+
+        .form-group:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .form-group:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .form-group:nth-child(4) {
+            animation-delay: 0.25s;
+        }
+
+        .form-group:nth-child(5) {
+            animation-delay: 0.3s;
+        }
+
+        .form-group:nth-child(6) {
+            animation-delay: 0.35s;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Hero Section -->
+    <section class="edit-hero">
+        <div class="hero-container">
+            <div class="hero-icon">
+                <i class="fas fa-user-edit"></i>
+            </div>
+            <h1 class="hero-title">Edit Your Profile</h1>
+            <p class="hero-subtitle">Update your personal and professional information</p>
+        </div>
+    </section>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <div class="form-card">
+            <!-- Success Message (show after save) -->
+            <div class="success-message" id="successMsg">
+                <i class="fas fa-check-circle"></i>
+                <span>Your profile has been updated successfully!</span>
+            </div>
+
+
+            <form method="POST" id="editForm">
+                {% csrf_token %}
+
+                <!-- Personal Information Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h2 class="section-title">Personal Information</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user-md"></i>Full Name
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="text" name="name" class="form-input" value="{{ doctor.name }}"
+                                    placeholder="Enter your full name">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-phone"></i>Phone Number
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="tel" name="phone" class="form-input" value="{{ doctor.phone }}"
+                                    placeholder="+91 9876543210">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">
+                                <i class="fas fa-envelope"></i>Email Address
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="email" name="email" class="form-input" value="{{ doctor.email }}"
+                                    placeholder="doctor@example.com">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <p class="input-hint">
+                                <i class="fas fa-info-circle"></i>
+                                This email will be used for notifications
+                            </p>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt"></i>Clinic Address
+                            </label>
+                            <div class="input-wrapper textarea">
+                                <textarea name="address" class="form-textarea"
+                                    placeholder="Enter your clinic address">{{ doctor.address }}</textarea>
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Professional Information Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <h2 class="section-title">Professional Information</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-id-badge"></i>Registration Number
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="readonly-display">
+                                    {{ doctor.regno }}
+                                </div>
+                                <i class="fas fa-id-badge"></i>
+                            </div>
+                            <p class="input-hint">
+                                <i class="fas fa-lock"></i>
+                                Verified by medical council
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-landmark"></i>State Medical Council
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="readonly-display">
+                                    {{ doctor.smc }}
+                                </div>
+                                <i class="fas fa-landmark"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="form-actions">
+                    <a href="{% url 'doctor_profile' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Form validation and enhancement
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('editForm');
+            const inputs = document.querySelectorAll('.form-input, .form-textarea');
+
+            // Add focus effects
+            inputs.forEach(input => {
+                input.addEventListener('focus', function () {
+                    this.closest('.form-group').classList.add('focused');
+                });
+
+                input.addEventListener('blur', function () {
+                    this.closest('.form-group').classList.remove('focused');
+                });
+            });
+
+            // Phone number formatting
+            const phoneInput = document.querySelector('input[name="phone"]');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function (e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length > 10) {
+                        value = value.slice(0, 10);
+                    }
+                    e.target.value = value;
+                });
+            }
+
+            // Show success message on form submit (for demo)
+            // In production, this would be handled by Django messages framework
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('saved') === 'true') {
+                document.getElementById('successMsg').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('successMsg').classList.remove('show');
+                }, 5000);
+            }
+
+            // Avatar preview
+            const avatarInput = document.querySelector('.avatar-upload-btn input');
+            const avatarPreview = document.querySelector('.avatar-preview');
+
+            if (avatarInput) {
+                avatarInput.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            avatarPreview.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,676 @@
+{#<!DOCTYPE html>#}
+{#<html>#}
+{#<head>#}
+{#    <title>Chat</title>#}
+{##}
+{#    <style>#}
+{#      body { font-family: 'Poppins'; background:#f1f5f9; }#}
+{#      #chat-box { max-width:600px; margin:20px auto; background:white;#}
+{#                  padding:20px; border-radius:15px; height:70vh;#}
+{#                  display:flex; flex-direction:column; }#}
+{#      #messages { flex:1; overflow-y:auto; background:#f8fafc; padding:10px;#}
+{#                  border-radius:10px; margin-bottom:10px; }#}
+{#      .msg { padding:8px 12px; border-radius:10px; margin:6px 0; max-width:70%; }#}
+{#      .me   { background:#0ea5e9; color:white; margin-left:auto; }#}
+{#      .other{ background:#e2e8f0; }#}
+{#    </style>#}
+{#</head>#}
+{#<body>#}
+{##}
+{#<h2 style="text-align:center;">Chat with {{ chat_partner.first_name }}</h2>#}
+{##}
+{#<div id="chat-box">#}
+{##}
+{#    <div id="messages"></div>#}
+{##}
+{#    <form id="form">#}
+{#        <input id="input" type="text" placeholder="Type message..." style="width:80%;" required>#}
+{#        <button type="submit">Send</button>#}
+{#    </form>#}
+{##}
+{#</div>#}
+{##}
+{#<script>#}
+{#const user1 = parseInt("{{ user_obj.id }}");#}
+{#const user2 = parseInt("{{ chat_partner.id }}");#}
+{##}
+{#const msgBox = document.getElementById("messages");#}
+{#const input = document.getElementById("input");#}
+{##}
+{#function addMessage(text, sender){#}
+{#    const div = document.createElement("div");#}
+{#    div.className = "msg " + (sender === user1 ? "me" : "other");#}
+{#    div.textContent = text;#}
+{#    msgBox.appendChild(div);#}
+{#    msgBox.scrollTop = msgBox.scrollHeight;#}
+{#}#}
+{##}
+{#async function loadMessages(){#}
+{#    const res = await fetch("{% url 'load_chat' %}", {#}
+{#        method: "POST",#}
+{#        headers: {'Content-Type':'application/json'},#}
+{#        body: JSON.stringify({user1:user1, user2:user2})#}
+{#    });#}
+{##}
+{#    const data = await res.json();#}
+{#    if(data.status==="ok"){#}
+{#        msgBox.innerHTML="";#}
+{#        data.messages.forEach(m=>{#}
+{#            addMessage(m.message, m.from);#}
+{#        });#}
+{#    }#}
+{#}#}
+{##}
+{#document.getElementById("form").addEventListener("submit", async e=>{#}
+{#    e.preventDefault();#}
+{##}
+{#    const text = input.value;#}
+{#    input.value = "";#}
+{##}
+{#    await fetch("{% url 'send_chat' %}", {#}
+{#        method:"POST",#}
+{#        headers:{'Content-Type':'application/json'},#}
+{#        body:JSON.stringify({#}
+{#            sender:user1,#}
+{#            receiver:user2,#}
+{#            message:text#}
+{#        })#}
+{#    });#}
+{##}
+{#    addMessage(text, user1);#}
+{#});#}
+{##}
+{#loadMessages();#}
+{#setInterval(loadMessages, 2000);#}
+{#</script>#}
+{##}
+{#</body>#}
+{#</html>#}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+            --gradient-2: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            max-width: 900px;
+            margin: 90px auto 2rem;
+            padding: 0 1rem;
+        }
+
+        .chat-card {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 140px);
+            max-height: 700px;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background: var(--gradient-1);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.3rem;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .online-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 14px;
+            height: 14px;
+            background: var(--success-color);
+            border: 3px solid var(--white);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .user-details h3 {
+            color: var(--white);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .user-status {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Messages Area */
+        .messages-area {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: var(--light-bg);
+        }
+
+        .messages-area::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages-area::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 10px;
+        }
+
+        .message-wrapper {
+            display: flex;
+            margin-bottom: 1rem;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-wrapper.sent {
+            justify-content: flex-end;
+        }
+
+        .message-wrapper.received {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            display: flex;
+            flex-direction: column;
+            max-width: 70%;
+        }
+
+        .message-bubble {
+            padding: 0.9rem 1.2rem;
+            border-radius: 16px;
+            word-wrap: break-word;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .sent .message-bubble {
+            background: var(--gradient-2);
+            color: var(--white);
+            border-bottom-right-radius: 4px;
+            margin-left: auto;
+        }
+
+        .received .message-bubble {
+            background: var(--white);
+            color: var(--dark-text);
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: var(--light-text);
+            margin-top: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .sent .message-time {
+            justify-content: flex-end;
+        }
+
+        .message-status {
+            color: var(--success-color);
+        }
+
+        /* Date Divider */
+        .date-divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .date-divider span {
+            background: var(--white);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--light-text);
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 1.5rem;
+            background: var(--white);
+            border-top: 2px solid var(--light-bg);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 0.8rem;
+            align-items: flex-end;
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--light-bg);
+            border: none;
+            border-radius: 10px;
+            color: var(--light-text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .input-btn:hover {
+            background: var(--border-color);
+            color: var(--secondary-color);
+        }
+
+        .message-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        #input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            resize: none;
+            outline: none;
+            transition: all 0.3s ease;
+            min-height: 50px;
+            max-height: 120px;
+        }
+
+        #input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(29, 122, 140, 0.1);
+        }
+
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 12px;
+            color: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.4);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Loading Indicator */
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            color: var(--light-text);
+            font-size: 0.85rem;
+        }
+
+        .loading-indicator.active {
+            display: block;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 1rem;
+        }
+
+        .typing-indicator.active {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--light-text);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chat-container {
+                margin: 80px auto 1rem;
+                padding: 0;
+            }
+
+            .chat-card {
+                border-radius: 0;
+                height: calc(100vh - 70px);
+                max-height: none;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .user-details h3 {
+                font-size: 1rem;
+            }
+
+            .header-actions {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'user_header.html' %}
+
+    <div class="chat-container">
+        <div class="chat-card">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        {{ chat_partner.first_name|slice:":1"|upper }}
+                        <div class="online-indicator"></div>
+                    </div>
+                    <div class="user-details">
+                        <h3>Dr. {{ chat_partner.first_name }}</h3>
+                        <p class="user-status">
+                            <i class="fas fa-circle" style="font-size: 0.5rem;"></i>
+                            Online
+                        </p>
+                    </div>
+                </div>
+{#                <div class="header-actions">#}
+{#                    <button class="header-btn" title="Search">#}
+{#                        <i class="fas fa-search"></i>#}
+{#                    </button>#}
+{#                    <button class="header-btn" title="More options">#}
+{#                        <i class="fas fa-ellipsis-v"></i>#}
+{#                    </button>#}
+{#                </div>#}
+            </div>
+
+            <!-- Messages Area -->
+            <div class="messages-area" id="messages">
+                <div class="loading-indicator active">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    Loading messages...
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <form id="form" class="input-wrapper">
+{#                    <div class="input-actions">#}
+{#                        <button type="button" class="input-btn" title="Attach file">#}
+{#                            <i class="fas fa-paperclip"></i>#}
+{#                        </button>#}
+{#                        <button type="button" class="input-btn" title="Emoji">#}
+{#                            <i class="fas fa-smile"></i>#}
+{#                        </button>#}
+{#                    </div>#}
+                    <div class="message-input-wrapper">
+                        <input
+                            type="text"
+                            id="input"
+                            placeholder="Type your message..."
+                            autocomplete="off"
+                            required
+                        />
+                    </div>
+                    <button type="submit" class="send-btn" title="Send message">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const user1 = parseInt("{{ user_obj.id }}");
+        const user2 = parseInt("{{ chat_partner.id }}");
+
+        const msgBox = document.getElementById("messages");
+        const input = document.getElementById("input");
+        const loadingIndicator = document.querySelector(".loading-indicator");
+
+        function formatTime() {
+            const now = new Date();
+            return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function addMessage(text, sender) {
+            // Hide loading indicator
+            loadingIndicator.classList.remove('active');
+
+            const wrapper = document.createElement("div");
+            wrapper.className = "message-wrapper " + (sender === user1 ? "sent" : "received");
+
+            const content = document.createElement("div");
+            content.className = "message-content";
+
+            const bubble = document.createElement("div");
+            bubble.className = "message-bubble";
+            bubble.textContent = text;
+
+            const time = document.createElement("div");
+            time.className = "message-time";
+
+            if (sender === user1) {
+                time.innerHTML = `${formatTime()} <i class="fas fa-check-double message-status"></i>`;
+            } else {
+                time.textContent = formatTime();
+            }
+
+            content.appendChild(bubble);
+            content.appendChild(time);
+            wrapper.appendChild(content);
+            msgBox.appendChild(wrapper);
+
+            // Scroll to bottom
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }
+
+        async function loadMessages() {
+            try {
+                const res = await fetch("{% url 'load_chat' %}", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ user1: user1, user2: user2 })
+                });
+
+                const data = await res.json();
+                if (data.status === "ok") {
+                    msgBox.innerHTML = "";
+
+                    if (data.messages.length === 0) {
+                        msgBox.innerHTML = '<div class="loading-indicator active">No messages yet. Start the conversation!</div>';
+                    } else {
+                        data.messages.forEach(m => {
+                            addMessage(m.message, m.from);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+
+        document.getElementById("form").addEventListener("submit", async e => {
+            e.preventDefault();
+
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = "";
+
+            try {
+                await fetch("{% url 'send_chat' %}", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        sender: user1,
+                        receiver: user2,
+                        message: text
+                    })
+                });
+
+                addMessage(text, user1);
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+        });
+
+        // Auto-focus input
+        input.focus();
+
+        // Load messages on page load
+        loadMessages();
+
+        // Refresh messages every 2 seconds
+        setInterval(loadMessages, 2000);
+
+        // Auto-resize textarea
+        input.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+    </script>
+</body>
+</html>

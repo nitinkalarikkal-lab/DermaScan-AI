@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedbacks - DermaScan AI Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --info-color: #3B82F6;
+            --light-bg: #F7F9FC;
+            --dark-bg: #0A1929;
+            --sidebar-bg: #0F172A;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+        }
+
+        /* ========== MAIN CONTENT LAYOUT ========== */
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* ========== TOP HEADER ========== */
+        .admin-topbar {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar-title h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .topbar-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .topbar-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .topbar-breadcrumb a:hover {
+            color: var(--accent-color);
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .filter-dropdown {
+            position: relative;
+        }
+
+        .filter-btn {
+            padding: 0.7rem 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--dark-text);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--secondary-color);
+            background: var(--light-bg);
+        }
+
+        /* ========== DASHBOARD CONTENT ========== */
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        /* Stats Summary */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--success-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card.total {
+            border-left-color: var(--info-color);
+        }
+
+        .stat-card.doctors {
+            border-left-color: var(--secondary-color);
+        }
+
+        .stat-card.patients {
+            border-left-color: var(--accent-color);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        /* Feedbacks Section */
+        .feedbacks-section {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .section-header h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .export-btn {
+            padding: 0.7rem 1.5rem;
+            background: var(--gradient-1);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.3);
+        }
+
+        /* Feedback Cards */
+        .feedbacks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .feedback-card {
+            background: var(--light-bg);
+            border-radius: 16px;
+            padding: 1.8rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .feedback-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .feedback-card.doctor-feedback {
+            border-left-color: var(--secondary-color);
+        }
+
+        .feedback-card.patient-feedback {
+            border-left-color: var(--accent-color);
+        }
+
+        .feedback-header {
+            display: flex;
+            align-items: start;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+        }
+
+        .feedback-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.2rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.2);
+        }
+
+        .user-avatar.patient {
+            background: linear-gradient(135deg, #F28F3B 0%, #FF6B35 100%);
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .feedback-user .user-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.3rem;
+        }
+
+        .user-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .user-type.doctor {
+            background: rgba(29, 122, 140, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .user-type.patient {
+            background: rgba(242, 143, 59, 0.1);
+            color: var(--accent-color);
+        }
+
+        .feedback-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--light-text);
+            font-size: 0.85rem;
+        }
+
+        .feedback-date i {
+            font-size: 0.9rem;
+        }
+
+        .feedback-content {
+            background: var(--white);
+            padding: 1.2rem;
+            border-radius: 12px;
+            line-height: 1.7;
+            color: var(--dark-text);
+            font-size: 0.95rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .feedback-content p {
+            margin: 0;
+        }
+
+        /* Quote styling */
+        .feedback-content::before {
+            content: '"';
+            font-size: 3rem;
+            color: var(--accent-color);
+            opacity: 0.2;
+            font-family: Georgia, serif;
+            line-height: 0;
+            position: relative;
+            top: 20px;
+            left: -5px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--light-text);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-topbar {
+                padding: 1rem;
+            }
+
+            .topbar-title h1 {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-content {
+                padding: 1rem;
+            }
+
+            .feedbacks-section {
+                padding: 1.5rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .feedback-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stats-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .feedback-card {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <!-- Include Admin Header -->
+        {% include 'admin_header.html' %}
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="admin-topbar">
+                <div class="topbar-title">
+                    <h1>Feedbacks</h1>
+                    <div class="topbar-breadcrumb">
+                        <a href="/admin_index">Dashboard</a>
+                        <i class="fas fa-chevron-right"></i>
+                        <span>Feedbacks</span>
+                    </div>
+                </div>
+                {# <div class="topbar-actions">#}
+                    {# <div class="filter-dropdown">#}
+                        {# <button class="filter-btn" id="filterBtn">#}
+                            {# <i class="fas fa-filter"></i>#}
+                            {# Filter: All#}
+                            {# </button>#}
+                        {# </div>#}
+                    {# </div>#}
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Stats Summary -->
+                <div class="stats-summary">
+                    <div class="stat-card total">
+                        <div class="stat-label">Total Feedbacks</div>
+                        <div class="stat-value">{{ feedbacks|length }}</div>
+                    </div>
+                    <div class="stat-card doctors">
+                        <div class="stat-label">From Doctors</div>
+                        <div class="stat-value">{{ doctor_feedback_count|default:"0" }}</div>
+                    </div>
+                    <div class="stat-card patients">
+                        <div class="stat-label">From Patients</div>
+                        <div class="stat-value">{{ patient_feedback_count|default:"0" }}</div>
+                    </div>
+                </div>
+
+                <!-- Feedbacks Section -->
+                <div class="feedbacks-section">
+                    <div class="section-header">
+                        <h2>All Feedbacks</h2>
+                        {# <button class="export-btn">#}
+                            {# <i class="fas fa-download"></i>#}
+                            {# Export Feedbacks#}
+                            {# </button>#}
+                    </div>
+
+                    <!-- Feedbacks List -->
+                    {% if feedbacks %}
+                    <div class="feedbacks-list">
+                        {% for feedback in feedbacks %}
+                        <div
+                            class="feedback-card {% if feedback.DOCTOR_ID %}doctor-feedback{% else %}patient-feedback{% endif %}">
+                            <div class="feedback-header">
+                                <div class="feedback-user">
+                                    {% if feedback.DOCTOR_ID %}
+                                    <div class="user-avatar">
+                                        {{ feedback.DOCTOR_ID.USER_ID.username|slice:":2"|upper }}
+                                    </div>
+                                    <div class="user-info">
+                                        <div class="user-name">{{ feedback.DOCTOR_ID.name }}</div>
+                                        <span class="user-type doctor">
+                                            <i class="fas fa-user-md"></i>
+                                            Doctor
+                                        </span>
+                                    </div>
+                                    {% elif feedback.PATIENT_ID %}
+                                    <div class="user-avatar patient">
+                                        {{ feedback.PATIENT_ID.USER_ID.username|slice:":2"|upper }}
+                                    </div>
+                                    <div class="user-info">
+                                        <div class="user-name">{{ feedback.PATIENT_ID.name }}</div>
+                                        <span class="user-type patient">
+                                            <i class="fas fa-user"></i>
+                                            Patient
+                                        </span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="feedback-date">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>{{ feedback.Date|date:"M d, Y" }}</span>
+                                </div>
+                            </div>
+                            <div class="feedback-content">
+                                <p>{{ feedback.Feedback_text }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-comments"></i>
+                        <h3>No Feedbacks Yet</h3>
+                        <p>No feedback submissions have been received</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Filter functionality
+        const filterBtn = document.getElementById('filterBtn');
+        if (filterBtn) {
+            filterBtn.addEventListener('click', function () {
+                alert('Filter functionality - Add dropdown to filter by Doctor/Patient/Date');
+            });
+        }
+
+        // Export functionality
+        const exportBtn = document.querySelector('.export-btn');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', function () {
+                alert('Export functionality - Connect to your backend to generate CSV/PDF');
+            });
+        }
+
+        // Smooth scroll for cards
+        const feedbackCards = document.querySelectorAll('.feedback-card');
+        if (feedbackCards.length > 0) {
+            feedbackCards.forEach((card, index) => {
+                card.style.animation = `slideUp 0.5s ease-out ${index * 0.05}s backwards`;
+            });
+        }
+
+        // Add animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,241 @@
+<header class="main-header">
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-section">
+                <a href="/" class="logo">
+                    <div class="logo-icon">
+                        <img src="/static/assets/img/dermascan-icon.svg" alt="DermaScan">
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">DermaScan</span>
+                        <span class="logo-subtitle">AI</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="nav-links">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#about" class="nav-link">About Us</a>
+{#                <a href="#contact" class="nav-link">Contact</a>#}
+            </div>
+
+            <div class="nav-actions">
+                <a href="/login_view/" class="btn-login">Login</a>
+                <div class="register-dropdown">
+                    <button class="btn-register" id="registerDropdownBtn" aria-label="Open registration options">
+                        Get Started
+                        <i class="fas fa-chevron-down" style="margin-left: 0.4rem; font-size: 0.8rem;"></i>
+                    </button>
+                    <div class="register-dropdown-menu" id="registerDropdownMenu">
+                        <a href="/register/" class="dropdown-item">
+                            <i class="fas fa-user-md"></i>
+                            Doctor Register
+                        </a>
+                        <a href="/user_register/" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            Patient Register
+                        </a>
+                    </div>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-content">
+            <a href="/" class="mobile-nav-link">Home</a>
+            <a href="#features" class="mobile-nav-link">Features</a>
+            <a href="#how-it-works" class="mobile-nav-link">How It Works</a>
+            <a href="#about" class="mobile-nav-link">About Us</a>
+            <a href="#contact" class="mobile-nav-link">Contact</a>
+            <div class="mobile-actions">
+                <a href="/login/" class="mobile-btn-login">Login</a>
+                <div class="mobile-register-section">
+                    <p style="font-size: 0.85rem; color: #6B7280; margin: 1rem 0 0.5rem;">Register As:</p>
+                    <a href="/register/" class="mobile-btn-register">
+                        <i class="fas fa-user-md"></i>
+                        Doctor
+                    </a>
+                    <a href="/user_register/" class="mobile-btn-register">
+                        <i class="fas fa-user"></i>
+                        Patient
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<style>
+    .logo-icon img {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    /* Register Dropdown Styles */
+    .register-dropdown {
+        position: relative;
+    }
+
+    .register-dropdown .btn-register {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .register-dropdown-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        min-width: 200px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        overflow: hidden;
+    }
+
+    .register-dropdown-menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .register-dropdown-menu .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1rem 1.5rem;
+        color: var(--dark-text, #1A1A2E);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .register-dropdown-menu .dropdown-item:last-child {
+        border-bottom: none;
+    }
+
+    .register-dropdown-menu .dropdown-item:hover {
+        background: var(--light-bg, #F7F9FC);
+        color: var(--accent-color);
+        padding-left: 2rem;
+    }
+
+    .nav-link:focus-visible,
+    .btn-login:focus-visible,
+    .btn-register:focus-visible,
+    .mobile-menu-toggle:focus-visible {
+        outline: 3px solid rgba(242, 143, 59, 0.45);
+        outline-offset: 3px;
+        border-radius: 12px;
+    }
+
+    .register-dropdown-menu .dropdown-item i {
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    .mobile-register-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        margin-top: 1rem;
+    }
+
+    .mobile-register-section .mobile-btn-register {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+    }
+</style>
+
+<script>
+    // Register dropdown toggle
+    const registerDropdownBtn = document.getElementById('registerDropdownBtn');
+    const registerDropdownMenu = document.getElementById('registerDropdownMenu');
+
+    if (registerDropdownBtn) {
+        registerDropdownBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            registerDropdownMenu.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!registerDropdownBtn.contains(e.target) && !registerDropdownMenu.contains(e.target)) {
+                registerDropdownMenu.classList.remove('active');
+            }
+        });
+    }
+
+    // Mobile menu toggle
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            mobileMenuToggle.classList.toggle('active');
+        });
+    }
+
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            if (mobileMenuToggle) {
+                mobileMenuToggle.classList.remove('active');
+            }
+        });
+    });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('.main-header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // Active link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (window.pageYOffset >= sectionTop - 100) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            const href = link.getAttribute('href');
+            if (href === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>

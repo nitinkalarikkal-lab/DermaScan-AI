@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Appointments - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --info-color: #3B82F6;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            padding-top: 70px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--white);
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-title h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-back {
+            padding: 0.8rem 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            color: var(--dark-text);
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        /* Stats Summary */
+        .stats-summary {
+            max-width: 1400px;
+            margin: 0 auto 2rem;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--info-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card.pending {
+            border-left-color: var(--warning-color);
+        }
+
+        .stat-card.approved {
+            border-left-color: var(--success-color);
+        }
+
+        .stat-card.paid {
+            border-left-color: var(--info-color);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        /* Main Content */
+        .appointments-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 2rem;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.8rem 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--dark-text);
+        }
+
+        .filter-tab:hover,
+        .filter-tab.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        /* Appointments List */
+        .appointments-section {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .section-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .appointments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .appointment-card {
+            background: var(--light-bg);
+            border-radius: 16px;
+            padding: 1.8rem;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--warning-color);
+        }
+
+        .appointment-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .appointment-card.approved {
+            border-left-color: var(--success-color);
+        }
+
+        .appointment-card.paid {
+            border-left-color: var(--info-color);
+        }
+
+        .appointment-card.rejected {
+            border-left-color: var(--danger-color);
+            opacity: 0.7;
+        }
+
+        .appointment-header {
+            display: flex;
+            align-items: start;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+        }
+
+        .patient-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .patient-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.2);
+        }
+
+        .patient-details h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .patient-meta {
+            font-size: 0.85rem;
+            color: var(--light-text);
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-badge.approved {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-badge.paid {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info-color);
+        }
+
+        .status-badge.rejected {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .appointment-body {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--white);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.2rem;
+        }
+
+        .info-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .appointment-actions {
+            display: flex;
+            gap: 0.8rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .action-btn.approve {
+            background: var(--success-color);
+            color: var(--white);
+        }
+
+        .action-btn.approve:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .action-btn.reject {
+            background: var(--danger-color);
+            color: var(--white);
+        }
+
+        .action-btn.reject:hover {
+            background: #DC2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .action-btn.chat {
+            background: var(--gradient-1);
+            color: var(--white);
+        }
+
+        .action-btn.chat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.4);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--light-text);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 1.5rem 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .stats-summary,
+            .appointments-container {
+                padding: 0 1rem 1rem;
+            }
+
+            .appointments-section {
+                padding: 1.5rem;
+            }
+
+            .appointment-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .appointment-body {
+                grid-template-columns: 1fr;
+            }
+
+            .appointment-actions {
+                flex-direction: column;
+            }
+
+            .page-title h1 {
+                font-size: 1.6rem;
+            }
+
+            .filter-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'doctor_header.html' %}
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-container">
+            <div class="header-content">
+                <div class="page-title">
+                    <h1>Appointments</h1>
+                    <p class="page-subtitle">Manage your patient appointments and consultations</p>
+                </div>
+                <div class="header-actions">
+                    <a href="/doctor_index" class="btn-back">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Summary -->
+    <div class="stats-summary">
+        <div class="stat-card pending">
+            <div class="stat-label">Pending Approval</div>
+            <div class="stat-value">{{ pending_count|default:"0" }}</div>
+        </div>
+        <div class="stat-card approved">
+            <div class="stat-label">Approved</div>
+            <div class="stat-value">{{ approved_count|default:"0" }}</div>
+        </div>
+        <div class="stat-card paid">
+            <div class="stat-label">Paid & Confirmed</div>
+            <div class="stat-value">{{ paid_count|default:"0" }}</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="appointments-container">
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All Appointments</button>
+            <button class="filter-tab" data-filter="pending">Pending</button>
+            <button class="filter-tab" data-filter="approved">Approved</button>
+            <button class="filter-tab" data-filter="paid">Paid</button>
+        </div>
+
+        <!-- Appointments List -->
+        <div class="appointments-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    Appointment Requests
+                </h2>
+            </div>
+
+            {% if bookings %}
+            <div class="appointments-list">
+                {% for booking in bookings %}
+                <div class="appointment-card {{ booking.status }}" data-status="{{ booking.status }}">
+                    <div class="appointment-header">
+                        <div class="patient-info">
+                            <div class="patient-avatar">
+                                {{ booking.PATIENT_ID.name|slice:":2"|upper }}
+                            </div>
+                            <div class="patient-details">
+                                <h3>{{ booking.PATIENT_ID.name }}</h3>
+                                <p class="patient-meta">
+                                    <span style="color: var(--accent-color); font-weight: 700;">
+                                        Token: #{{ booking.token_number|default:"-" }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <span class="status-badge {{ booking.status }}">
+                            {% if booking.status == 'pending' %}
+                            <i class="fas fa-clock"></i>
+                            Pending Approval
+                            {% elif booking.status == 'approved' %}
+                            <i class="fas fa-check-circle"></i>
+                            Approved
+                            {% elif booking.status == 'paid' %}
+                            <i class="fas fa-check-double"></i>
+                            Paid & Confirmed
+                            {% elif booking.status == 'rejected' %}
+                            <i class="fas fa-times-circle"></i>
+                            Rejected
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="appointment-body">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                            <div class="info-content">
+                                <p class="info-label">Date</p>
+                                <p class="info-value">{{ booking.shedule_id.date }}</p>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="info-content">
+                                <p class="info-label">Time</p>
+                                {% with start=booking.shedule_id.start_time end=booking.shedule_id.end_time %}
+                                <p class="info-value">{{ start }} - {{ end }}</p>
+                                {% endwith %}
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                            <div class="info-content">
+                                <p class="info-label">Consultation Fee</p>
+                                <p class="info-value">₹{{ booking.shedule_id.fees }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if booking.status == 'pending' %}
+                    <div class="appointment-actions">
+                        <a href="{% url 'doctor_approved_booking' booking.id %}" class="action-btn approve">
+                            <i class="fas fa-check"></i>
+                            Approve
+                        </a>
+                        <a href="{% url 'doctor_rejected_booking' booking.id %}" class="action-btn reject">
+                            <i class="fas fa-times"></i>
+                            Reject
+                        </a>
+                    </div>
+                    {% elif booking.status == 'paid' %}
+                    <div class="appointment-actions">
+                        <a href="{% url 'chat' booking.PATIENT_ID.USER_ID.id %}" class="action-btn chat">
+                            <i class="fas fa-comments"></i>
+                            Start Chat
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <h3>No Appointments Yet</h3>
+                <p>You don't have any appointment requests at the moment</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Filter functionality
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const appointmentCards = document.querySelectorAll('.appointment-card');
+
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', function () {
+                // Remove active class from all tabs
+                filterTabs.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+
+                const filter = this.getAttribute('data-filter');
+
+                appointmentCards.forEach(card => {
+                    if (filter === 'all') {
+                        card.style.display = '';
+                    } else {
+                        if (card.getAttribute('data-status') === filter) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+
+        // Animate cards on load
+        if (appointmentCards.length > 0) {
+            appointmentCards.forEach((card, index) => {
+                card.style.animation = `slideUp 0.5s ease-out ${index * 0.05}s backwards`;
+            });
+        }
+
+        // Add animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>

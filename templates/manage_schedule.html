@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Schedule - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --info-color: #3B82F6;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            padding-top: 70px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--white);
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-title h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-back {
+            padding: 0.8rem 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            color: var(--dark-text);
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        /* Main Content */
+        .schedule-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 2rem;
+        }
+
+        /* Add Schedule Card */
+        .add-schedule-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .add-schedule-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+
+        .card-title {
+            flex: 1;
+        }
+
+        .card-title h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .card-title p {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        /* Form */
+        .schedule-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--dark-text);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group label i {
+            color: var(--secondary-color);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--white);
+            color: var(--dark-text);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 4px rgba(29, 122, 140, 0.1);
+        }
+
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-submit {
+            flex: 1;
+            padding: 1rem;
+            background: var(--gradient-1);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.4);
+        }
+
+        .btn-reset {
+            padding: 1rem 2rem;
+            background: var(--white);
+            color: var(--dark-text);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-reset:hover {
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        /* Schedule List Card */
+        .schedule-list-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Schedule Items */
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .schedule-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--light-bg);
+            border-radius: 12px;
+            border-left: 4px solid var(--success-color);
+            transition: all 0.3s ease;
+        }
+
+        .schedule-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .schedule-date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 10px;
+            min-width: 80px;
+        }
+
+        .schedule-date-day {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+
+        .schedule-date-month {
+            font-size: 0.85rem;
+            color: var(--light-text);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .schedule-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .schedule-time {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .time-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(29, 122, 140, 0.1);
+            color: var(--secondary-color);
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .schedule-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        .schedule-meta i {
+            color: var(--secondary-color);
+        }
+
+        .schedule-fees {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #F28F3B 0%, #FF6B35 100%);
+            color: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            min-width: 100px;
+        }
+
+        .fees-label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            margin-bottom: 0.3rem;
+        }
+
+        .fees-amount {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--light-text);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        /* Messages */
+        .message {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            border: 2px solid var(--success-color);
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+            border: 2px solid var(--danger-color);
+        }
+
+        .message i {
+            font-size: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 1.5rem 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .schedule-container {
+                padding: 0 1rem 1rem;
+            }
+
+            .add-schedule-card,
+            .schedule-list-card {
+                padding: 1.5rem;
+            }
+
+            .schedule-form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .schedule-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .schedule-date {
+                flex-direction: row;
+                gap: 0.5rem;
+                min-width: auto;
+            }
+
+            .page-title h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'doctor_header.html' %}
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-container">
+            <div class="header-content">
+                <div class="page-title">
+                    <h1>Manage Schedule</h1>
+                    <p class="page-subtitle">Set your availability and consultation fees</p>
+                </div>
+                <div class="header-actions">
+                    <a href="/doctor_index" class="btn-back">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="schedule-container">
+        <!-- Success/Error Messages -->
+        {% if messages %}
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">
+            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+            <span>{{ message }}</span>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <!-- Add Schedule Form -->
+        <div class="add-schedule-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-calendar-plus"></i>
+                </div>
+                <div class="card-title">
+                    <h2>Add New Schedule</h2>
+                    <p>Create a new availability slot for patient consultations</p>
+                </div>
+            </div>
+
+            <form method="POST" class="schedule-form" id="scheduleForm">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="date">
+                        <i class="fas fa-calendar"></i>
+                        Date
+                    </label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="start_time">
+                        <i class="fas fa-clock"></i>
+                        Start Time
+                    </label>
+                    <input type="time" id="start_time" name="start_time" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="end_time">
+                        <i class="fas fa-clock"></i>
+                        End Time
+                    </label>
+                    <input type="time" id="end_time" name="end_time" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fees">
+                        <i class="fas fa-rupee-sign"></i>
+                        Consultation Fees
+                    </label>
+                    <input type="number" id="fees" name="fees" placeholder="Enter amount" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="max_patients">
+                        <i class="fas fa-users"></i>
+                        Max Patients (Tokens)
+                    </label>
+                    <input type="number" id="max_patients" name="max_patients" value="20" min="1" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-plus-circle"></i>
+                        Add Schedule
+                    </button>
+                    <button type="reset" class="btn-reset">
+                        <i class="fas fa-redo"></i>
+                        Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Schedule List -->
+        <div class="schedule-list-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-list-ul"></i>
+                </div>
+                <div class="card-title">
+                    <h2>Your Schedule</h2>
+                    <p>View and manage your availability slots</p>
+                </div>
+            </div>
+
+            {% if schedule %}
+            <div class="schedule-list">
+                {% for s in schedule %}
+                <div class="schedule-item">
+                    <div class="schedule-date">
+                        <span class="schedule-date-day">{{ s.date|date:"d" }}</span>
+                        <span class="schedule-date-month">{{ s.date|date:"M" }}</span>
+                    </div>
+
+                    <div class="schedule-details">
+                        <div class="schedule-time">
+                            <span class="time-badge">
+                                <i class="fas fa-clock"></i>
+                                {{ s.start_time|time:"g:i A" }}
+                            </span>
+                            <i class="fas fa-arrow-right"></i>
+                            <span class="time-badge">
+                                <i class="fas fa-clock"></i>
+                                {{ s.end_time|time:"g:i A" }}
+                            </span>
+                        </div>
+                        <div class="schedule-meta">
+                            <span><i class="fas fa-calendar-day"></i> {{ s.date|date:"l" }}</span>
+                            <span><i class="fas fa-hourglass-half"></i> Duration: {% widthratio s.end_time.hour 1 1 %}
+                                hour(s)</span>
+                        </div>
+                    </div>
+
+                    <div class="schedule-fees">
+                        <span class="fees-label">Fees</span>
+                        <span class="fees-amount">₹{{ s.fees }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <h3>No Schedule Added</h3>
+                <p>Add your first availability slot to start accepting appointments</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Set minimum date to today
+        const dateInput = document.getElementById('date');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.setAttribute('min', today);
+        }
+
+        // Validate time
+        const startTimeInput = document.getElementById('start_time');
+        const endTimeInput = document.getElementById('end_time');
+        const scheduleForm = document.getElementById('scheduleForm');
+
+        if (scheduleForm) {
+            scheduleForm.addEventListener('submit', function (e) {
+                const startTime = startTimeInput.value;
+                const endTime = endTimeInput.value;
+
+                if (startTime && endTime && startTime >= endTime) {
+                    e.preventDefault();
+                    alert('End time must be after start time!');
+                    endTimeInput.focus();
+                }
+            });
+        }
+
+        // Auto-hide messages after 5 seconds
+        const messages = document.querySelectorAll('.message');
+        if (messages.length > 0) {
+            messages.forEach(message => {
+                setTimeout(() => {
+                    message.style.animation = 'slideDown 0.3s ease-out reverse';
+                    setTimeout(() => {
+                        message.remove();
+                    }, 300);
+                }, 5000);
+            });
+        }
+    </script>
+</body>
+
+</html>

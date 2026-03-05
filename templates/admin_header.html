@@ -1,0 +1,556 @@
+{% load static %}
+<link href="/static/assets/img/dermascan-icon.svg" rel="icon" type="image/svg+xml">
+<link href="/static/assets/img/favicon.png" rel="icon" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+    rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    :root {
+        --primary-color: #0A2E5C;
+        --secondary-color: #1D7A8C;
+        --accent-color: #F28F3B;
+        --success-color: #10B981;
+        --warning-color: #F59E0B;
+        --danger-color: #EF4444;
+        --light-bg: #F7F9FC;
+        --dark-bg: #0A1929;
+        --sidebar-bg: #0F172A;
+        --dark-text: #1A1A2E;
+        --light-text: #6B7280;
+        --white: #FFFFFF;
+        --border-color: #E5E7EB;
+        --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+    }
+
+
+
+    /* ========== ADMIN SIDEBAR STYLES ========== */
+    .admin-wrapper {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .admin-sidebar {
+        width: 280px;
+        background: var(--sidebar-bg);
+        color: var(--white);
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .admin-sidebar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .admin-sidebar::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .admin-sidebar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+    }
+
+    .admin-sidebar::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .sidebar-header {
+        padding: 2rem 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        text-decoration: none;
+        margin-bottom: 0.5rem;
+    }
+
+    .sidebar-logo-icon {
+        width: 45px;
+        height: 45px;
+        background: var(--gradient-1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        flex-shrink: 0;
+    }
+
+    .sidebar-logo-icon img {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    .sidebar-logo-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+    }
+
+    .sidebar-logo-title {
+        font-family: 'Crimson Pro', serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--white);
+    }
+
+    .sidebar-logo-subtitle {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        color: var(--accent-color);
+    }
+
+    .admin-badge {
+        display: inline-block;
+        background: rgba(242, 143, 59, 0.15);
+        color: var(--accent-color);
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+        letter-spacing: 0.5px;
+    }
+
+    .sidebar-nav {
+        padding: 1.5rem 0;
+    }
+
+    .nav-section-title {
+        padding: 1rem 1.5rem 0.5rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .sidebar-nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-item {
+        margin: 0.3rem 0.75rem;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.9rem 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+        font-weight: 500;
+        position: relative;
+    }
+
+    .nav-link i {
+        width: 20px;
+        font-size: 1.1rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--white);
+        transform: translateX(5px);
+    }
+
+    .nav-link.active {
+        background: var(--gradient-1);
+        color: var(--white);
+        box-shadow: 0 4px 15px rgba(29, 122, 140, 0.3);
+    }
+
+    .nav-link.active i {
+        transform: scale(1.1);
+    }
+
+    .nav-badge {
+        margin-left: auto;
+        background: var(--danger-color);
+        color: var(--white);
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        border-radius: 12px;
+        min-width: 22px;
+        text-align: center;
+    }
+
+    .nav-badge.success {
+        background: var(--success-color);
+    }
+
+    .nav-badge.warning {
+        background: var(--warning-color);
+    }
+
+    .sidebar-divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 1rem 1.5rem;
+    }
+
+    .sidebar-footer {
+        padding: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-user {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        margin-bottom: 1rem;
+    }
+
+    .user-avatar {
+        width: 45px;
+        height: 45px;
+        background: var(--gradient-1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--white);
+        flex-shrink: 0;
+    }
+
+    .user-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .user-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--white);
+        margin-bottom: 0.2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .user-role {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .sidebar-toggle {
+        display: none;
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 1001;
+        background: var(--primary-color);
+        color: var(--white);
+        border: none;
+        width: 45px;
+        height: 45px;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-toggle:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar-toggle i {
+        font-size: 1.2rem;
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1024px) {
+        .admin-sidebar {
+            transform: translateX(-100%);
+        }
+
+        .admin-sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-toggle {
+            display: block;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .admin-sidebar {
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 1rem;
+        }
+
+        .sidebar-logo-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-logo-title {
+            font-size: 1.2rem;
+        }
+    }
+
+    /* ========== ANIMATION ========== */
+    @keyframes slideIn {
+        from {
+            transform: translateX(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .nav-item {
+        animation: slideIn 0.3s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .nav-item:nth-child(1) {
+        animation-delay: 0.05s;
+    }
+
+    .nav-item:nth-child(2) {
+        animation-delay: 0.1s;
+    }
+
+    .nav-item:nth-child(3) {
+        animation-delay: 0.15s;
+    }
+
+    .nav-item:nth-child(4) {
+        animation-delay: 0.2s;
+    }
+
+    .nav-item:nth-child(5) {
+        animation-delay: 0.25s;
+    }
+
+    .nav-item:nth-child(6) {
+        animation-delay: 0.3s;
+    }
+
+    .nav-item:nth-child(7) {
+        animation-delay: 0.35s;
+    }
+
+    .nav-item:nth-child(8) {
+        animation-delay: 0.4s;
+    }
+</style>
+<!-- Mobile Toggle Button -->
+<button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-bars"></i>
+</button>
+
+<!-- Sidebar Overlay (Mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Admin Sidebar -->
+<aside class="admin-sidebar" id="adminSidebar">
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+        <a href="/" class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+                <img src="/static/assets/img/dermascan-icon.svg" alt="DermaScan">
+            </div>
+            <div class="sidebar-logo-text">
+                <span class="sidebar-logo-title">DermaScan</span>
+                <span class="sidebar-logo-subtitle">AI</span>
+            </div>
+        </a>
+        <span class="admin-badge">ADMIN PANEL</span>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar-nav">
+        <div class="nav-section-title">Main</div>
+        <ul>
+            <li class="nav-item">
+                <a href="/admin_index" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="nav-section-title">Doctor Management</div>
+        <ul>
+            <li class="nav-item">
+                <a href="/verify_doctor" class="nav-link">
+                    <i class="fas fa-user-check"></i>
+                    <span>Verify Doctors</span>
+                    {% if pending_doctors_count > 0 %}
+                    <span class="nav-badge warning">{{ pending_doctors_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/approved_doctors" class="nav-link">
+                    <i class="fas fa-user-md"></i>
+                    <span>Approved Doctors</span>
+                    {% if approved_doctors_count > 0 %}
+                    <span class="nav-badge success">{{ approved_doctors_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="nav-section-title">User Management</div>
+        <ul>
+            <li class="nav-item">
+                <a href="/users" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>View Users</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/feedbacks" class="nav-link">
+                    <i class="fas fa-star"></i>
+                    <span>Feedbacks</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/complaint" class="nav-link">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Complaints</span>
+                    {% if open_complaints_count > 0 %}
+                    <span class="nav-badge">{{ open_complaints_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="nav-section-title">System</div>
+        <ul>
+
+            <li class="nav-item">
+                <a href="/logout_view" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+        <div class="sidebar-user">
+            <div class="user-avatar">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="user-info">
+                <div class="user-name">{{ request.user.username }}</div>
+                <div class="user-role">System Administrator</div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<script>
+    // Sidebar toggle functionality
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const adminSidebar = document.getElementById('adminSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+            adminSidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+        });
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', () => {
+            adminSidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+    }
+
+    // Set active link based on current page
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            navLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+        }
+    });
+
+    // Close sidebar on mobile when clicking a link
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 1024) {
+                adminSidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            }
+        });
+    });
+</script>
+
+
+</html>

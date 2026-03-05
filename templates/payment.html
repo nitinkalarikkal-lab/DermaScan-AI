@@ -1,0 +1,584 @@
+{#<!DOCTYPE html>#}
+{#<html>#}
+{#<head>#}
+{#    <title>Make Payment</title>#}
+{#    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>#}
+{#</head>#}
+{#<body>#}
+{##}
+{#<h2>Pay for Appointment</h2>#}
+{#<p>Amount: ₹{{ amount }}</p>#}
+{##}
+{#<form action="{{ callback_url }}" method="POST" id="payForm">#}
+{#    {% csrf_token %}#}
+{#    <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">#}
+{#    <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">#}
+{#    <input type="hidden" name="razorpay_signature" id="razorpay_signature">#}
+{#    <input type="hidden" name="booking_id" value="{{ booking.id }}">#}
+{#</form>#}
+{##}
+{#<button id="rzp-button">Pay Now</button>#}
+{##}
+{#<script>#}
+{#var options = {#}
+{#    "key": "{{ razorpay_merchant_key }}",#}
+{#    "amount": "{{ amount_paise }}",#}
+{#    "currency": "INR",#}
+{#    "name": "Doctor Appointment",#}
+{#    "description": "Booking ID: {{ booking.id }}",#}
+{#    "order_id": "{{ razorpay_order_id }}",#}
+{#    "handler": function (response){#}
+{#        document.getElementById("razorpay_payment_id").value = response.razorpay_payment_id;#}
+{#        document.getElementById("razorpay_order_id").value = response.razorpay_order_id;#}
+{#        document.getElementById("razorpay_signature").value = response.razorpay_signature;#}
+{#        document.getElementById("payForm").submit();#}
+{#    },#}
+{#    "theme": {#}
+{#        "color": "#3399cc"#}
+{#    }#}
+{#{;#}
+{##}
+{#var rzp = new Razorpay(options);#}
+{##}
+{#document.getElementById("rzp-button").onclick = function(e){#}
+{#    rzp.open();#}
+{#    e.preventDefault();#}
+{#}#}
+{#</script>#}
+{##}
+{#</body>#}
+{#</html>#}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - DermaScan AI</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+            --gradient-2: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Payment Container */
+        .payment-container {
+            max-width: 600px;
+            width: 100%;
+            margin: 2rem;
+        }
+
+        /* Logo Section */
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo-subtitle {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        /* Payment Card */
+        .payment-card {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Card Header */
+        .card-header {
+            background: var(--gradient-1);
+            padding: 2rem;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .payment-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+        }
+
+        .card-header h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Card Body */
+        .card-body {
+            padding: 2.5rem;
+        }
+
+        /* Booking Details */
+        .booking-details {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--light-text);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .detail-label i {
+            color: var(--secondary-color);
+        }
+
+        .detail-value {
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        /* Amount Section */
+        .amount-section {
+            background: rgba(16, 185, 129, 0.05);
+            border: 2px dashed var(--success-color);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .amount-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .amount-value {
+            font-family: 'Crimson Pro', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--success-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .currency-symbol {
+            font-size: 2rem;
+        }
+
+        /* Security Badge */
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            padding: 1rem;
+            background: rgba(59, 130, 246, 0.05);
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .security-badge i {
+            font-size: 1.3rem;
+            color: #3B82F6;
+        }
+
+        .security-badge p {
+            color: var(--dark-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Payment Button */
+        .payment-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 1.3rem;
+            background: var(--gradient-2);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-pay i {
+            font-size: 1.3rem;
+        }
+
+        .btn-cancel {
+            width: 100%;
+            padding: 1rem;
+            background: transparent;
+            color: var(--light-text);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-cancel:hover {
+            border-color: var(--light-text);
+            background: var(--light-bg);
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--light-bg);
+        }
+
+        .payment-method-icon {
+            width: 50px;
+            height: 35px;
+            background: var(--light-bg);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-text);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method-icon:hover {
+            background: var(--border-color);
+            transform: scale(1.1);
+        }
+
+        /* Loading State */
+        .btn-pay.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-pay.loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .payment-container {
+                margin: 1rem;
+            }
+
+            .card-body {
+                padding: 2rem 1.5rem;
+            }
+
+            .amount-value {
+                font-size: 2.5rem;
+            }
+
+            .currency-symbol {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-hospital"></i>
+                </div>
+                <span class="logo-text">DermaScan</span>
+            </div>
+            <p class="logo-subtitle">Secure Payment Gateway</p>
+        </div>
+
+        <!-- Payment Card -->
+        <div class="payment-card">
+            <!-- Card Header -->
+            <div class="card-header">
+                <div class="payment-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <h1>Complete Your Payment</h1>
+                <p>Secure checkout for your appointment</p>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body">
+                <!-- Booking Details -->
+                <div class="booking-details">
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            <i class="fas fa-receipt"></i>
+                            Booking ID
+                        </span>
+                        <span class="detail-value">#{{ booking.id }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            <i class="fas fa-user-md"></i>
+                            Doctor
+                        </span>
+                        <span class="detail-value">Dr. {{ booking.shedule_id.DOCTOR_ID.name }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            <i class="fas fa-calendar"></i>
+                            Date
+                        </span>
+                        <span class="detail-value">{{ booking.date }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">
+                            <i class="fas fa-clock"></i>
+                            Time
+                        </span>
+                        <span class="detail-value">{{ booking.shedule_id.start_time }}</span>
+                    </div>
+                </div>
+
+                <!-- Amount Section -->
+                <div class="amount-section">
+                    <div class="amount-label">Amount to Pay</div>
+                    <div class="amount-value">
+                        <span class="currency-symbol">₹</span>
+                        <span>{{ amount }}</span>
+                    </div>
+                </div>
+
+                <!-- Security Badge -->
+                <div class="security-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <p>256-bit SSL Encrypted • 100% Secure Payment</p>
+                </div>
+
+                <!-- Hidden Form -->
+                <form action="{{ callback_url }}" method="POST" id="payForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+                    <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+                    <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+                    <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                </form>
+
+                <!-- Payment Actions -->
+                <div class="payment-actions">
+                    <button id="rzp-button" class="btn-pay">
+                        <i class="fas fa-lock"></i>
+                        Pay ₹{{ amount }} Securely
+                    </button>
+                    <a href="/view_bookings/" class="btn-cancel">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Bookings
+                    </a>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                    <div class="payment-method-icon" title="Credit Card">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="payment-method-icon" title="Debit Card">
+                        <i class="far fa-credit-card"></i>
+                    </div>
+                    <div class="payment-method-icon" title="UPI">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="payment-method-icon" title="Net Banking">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="payment-method-icon" title="Wallet">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var options = {
+            "key": "{{ razorpay_merchant_key }}",
+            "amount": "{{ amount_paise }}",
+            "currency": "INR",
+            "name": "DermaScan AI",
+            "description": "Doctor Appointment - Booking #{{ booking.id }}",
+            "order_id": "{{ razorpay_order_id }}",
+            "handler": function (response){
+                document.getElementById("razorpay_payment_id").value = response.razorpay_payment_id;
+                document.getElementById("razorpay_order_id").value = response.razorpay_order_id;
+                document.getElementById("razorpay_signature").value = response.razorpay_signature;
+                document.getElementById("payForm").submit();
+            },
+            "prefill": {
+                "name": "{{ booking.PATIENT_ID.name|default:'' }}",
+                "email": "{{ booking.PATIENT_ID.USER_ID.email|default:'' }}",
+                "contact": "{{ booking.PATIENT_ID.phone|default:'' }}"
+            },
+            "theme": {
+                "color": "#1D7A8C"
+            },
+            "modal": {
+                "ondismiss": function(){
+                    // Re-enable button if payment is cancelled
+                    const btn = document.getElementById("rzp-button");
+                    btn.classList.remove('loading');
+                    btn.innerHTML = '<i class="fas fa-lock"></i> Pay ₹{{ amount }} Securely';
+                }
+            }
+        };
+
+        var rzp = new Razorpay(options);
+
+        // Handle payment errors
+        rzp.on('payment.failed', function (response){
+            alert('Payment Failed: ' + response.error.description);
+            const btn = document.getElementById("rzp-button");
+            btn.classList.remove('loading');
+            btn.innerHTML = '<i class="fas fa-lock"></i> Pay ₹{{ amount }} Securely';
+        });
+
+        document.getElementById("rzp-button").onclick = function(e){
+            e.preventDefault();
+
+            // Add loading state
+            this.classList.add('loading');
+            this.innerHTML = '<i class="fas fa-spinner"></i> Opening Payment Gateway...';
+
+            // Open Razorpay
+            rzp.open();
+        }
+    </script>
+</body>
+</html>

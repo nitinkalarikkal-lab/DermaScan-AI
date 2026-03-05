@@ -1,0 +1,851 @@
+{#{% include 'user_header.html' %}#}
+{#
+<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#
+
+<head>#}
+    {#
+    <meta charset="UTF-8">#}
+    {#
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+    {# <title>Patient Profile</title>#}
+    {# <style>
+        #
+        }
+
+            {
+            # body {
+                #
+            }
+
+                {
+                # font-family: Arial, sans-serif;
+                #
+            }
+
+                {
+                # background-color: #f4f4f9;
+                #
+            }
+
+                {
+                # margin: 0;
+                #
+            }
+
+                {
+                # padding: 0;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # .container {
+                #
+            }
+
+                {
+                # width: 70%;
+                #
+            }
+
+                {
+                # margin: 50px auto;
+                #
+            }
+
+                {
+                # padding: 20px;
+                #
+            }
+
+                {
+                # background-color: white;
+                #
+            }
+
+                {
+                # border-radius: 8px;
+                #
+            }
+
+                {
+                # box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # h2 {
+                #
+            }
+
+                {
+                # text-align: center;
+                #
+            }
+
+                {
+                # color: #3a64fc;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # .profile-table {
+                #
+            }
+
+                {
+                # width: 100%;
+                #
+            }
+
+                {
+                # border-collapse: collapse;
+                #
+            }
+
+                {
+                # margin-top: 20px;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # .profile-table td {
+                #
+            }
+
+                {
+                # padding: 10px;
+                #
+            }
+
+                {
+                # font-size: 16px;
+                #
+            }
+
+                {
+                # color: #333;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # .profile-table td:first-child {
+                #
+            }
+
+                {
+                # font-weight: bold;
+                #
+            }
+
+                {
+                # width: 30%;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # .profile-table input,
+            #
+        }
+
+            {
+            # .profile-table button {
+                #
+            }
+
+                {
+                # width: 100%;
+                #
+            }
+
+                {
+                # padding: 8px;
+                #
+            }
+
+                {
+                # margin: 5px 0;
+                #
+            }
+
+                {
+                # font-size: 14px;
+                #
+            }
+
+                {
+                # border-radius: 5px;
+                #
+            }
+
+                {
+                # border: 1px solid #ccc;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # .profile-table button {
+                #
+            }
+
+                {
+                # background-color: #3a64fb;
+                #
+            }
+
+                {
+                # color: white;
+                #
+            }
+
+                {
+                # border: none;
+                #
+            }
+
+                {
+                # cursor: pointer;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # .profile-table button:hover {
+                #
+            }
+
+                {
+                # background-color: #3a65fc;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # .profile-actions {
+                #
+            }
+
+                {
+                # width: 100%;
+                #
+            }
+
+                {
+                # display: block;
+                /* Make buttons stack vertically */
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            # .profile-actions button {
+                #
+            }
+
+                {
+                # width: 100%;
+                /* Ensure buttons have full width */
+                #
+            }
+
+                {
+                # margin-top: 10px;
+                #
+            }
+
+                {
+                #
+            }
+
+            #
+        }
+
+            {
+            #
+    </style>#}
+    {#
+</head>#}
+{#
+
+<body>#}
+    {# <div class="container">#}
+        {# <h2>Patient Profile</h2>#}
+        {# {% if user %}#}
+        {# <table class="profile-table">#}
+            {##}
+            {# <tr>#}
+                {# <td>Full Name:</td>#}
+                {# <td>{{ user.name }}</td>#}
+                {# </tr>#}
+            {# <tr>#}
+                {# <td>Age:</td>#}
+                {# <td>{{ user.age }}</td>#}
+                {# </tr>#}
+            {# <tr>#}
+                {# <td>Gender:</td>#}
+                {# <td>{{ user.gender }}</td>#}
+                {# </tr>#}
+            {# <tr>#}
+                {# <td>Email:</td>#}
+                {# <td>{{ user.email }}</td>#}
+                {# </tr>#}
+            {# <tr>#}
+                {# <td>Phone:</td>#}
+                {# <td>{{ user.phone }}</td>#}
+                {# </tr>#}
+            {# <tr>#}
+                {# <td>Address:</td>#}
+                {# <td>{{ user.address }}</td>#}
+                {# </tr>#}
+            {# <tr class="profile-actions">#}
+                {# <td colspan="2">#}
+                    {# <a href="{% url 'user_profile_edit' %}"><button type="button">Edit</button></a>#}
+                    {# <a href="{% url 'login_view' %}"><button type="button">Logout</button></a>#}
+                    {# </td>#}
+                {# </tr>#}
+            {# </table>#}
+        {# {% endif %}#}
+        {# </div>#}
+    {#</body>#}
+{#
+
+</html>#}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--gradient-1);
+            padding: 4rem 2rem 3rem;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        }
+
+        .header-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+
+        .page-header h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Profile Section */
+        .profile-section {
+            max-width: 800px;
+            margin: -3rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .profile-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+
+        .card-title h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .card-title p {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        /* Profile Info Grid */
+        .profile-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-item {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            background: rgba(29, 122, 140, 0.05);
+            transform: translateY(-3px);
+        }
+
+        .info-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        .info-label i {
+            color: var(--secondary-color);
+            font-size: 1rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            word-wrap: break-word;
+        }
+
+        /* Action Buttons */
+        .profile-actions {
+            display: flex;
+            gap: 1rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--light-bg);
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1.2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--accent-color);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(242, 143, 59, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: #E07A2A;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(242, 143, 59, 0.4);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .stat-card {
+            background: var(--light-bg);
+            padding: 1.2rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: var(--gradient-1);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.2);
+        }
+
+        .stat-card:hover .stat-value,
+        .stat-card:hover .stat-label {
+            color: var(--white);
+        }
+
+        .stat-value {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--light-text);
+            font-weight: 600;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            color: var(--light-text);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.4rem;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 3rem 1rem 2rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .profile-section {
+                padding: 0 1rem;
+                margin: -2rem auto 2rem;
+            }
+
+            .profile-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .profile-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-actions {
+                flex-direction: column;
+            }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'user_header.html' %}
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-container">
+            <h1>{{ user.name }}</h1>
+            <p>Patient ID: #{{ user.id }}</p>
+        </div>
+    </section>
+
+    {% if messages %}
+    <div class="messages-container" style="max-width: 800px; margin: 1rem auto; padding: 0 2rem;">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}"
+            style="padding: 1rem; border-radius: 12px; background: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--success-color); color: var(--success-color); display: flex; align-items: center; gap: 1rem; animation: slideUp 0.5s ease-out;">
+            <i class="fas fa-check-circle"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Profile Section -->
+    <section class="profile-section">
+        {% if user %}
+        <div class="profile-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="card-title">
+                    <h2>Personal Information</h2>
+                    <p>Your profile details</p>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-value">{{ bookings_count|default:"0" }}</div>
+                    <div class="stat-label">Bookings</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ completed_count|default:"0" }}</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ pending_count|default:"0" }}</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+            </div>
+
+            <!-- Profile Info Grid -->
+            <div class="profile-info-grid">
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-user"></i>
+                        Full Name
+                    </div>
+                    <div class="info-value">{{ user.name }}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-birthday-cake"></i>
+                        Age
+                    </div>
+                    <div class="info-value">{{ user.age }} years</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-venus-mars"></i>
+                        Gender
+                    </div>
+                    <div class="info-value">{{ user.gender }}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-envelope"></i>
+                        Email Address
+                    </div>
+                    <div class="info-value">{{ user.email }}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-phone"></i>
+                        Phone Number
+                    </div>
+                    <div class="info-value">{{ user.phone }}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Address
+                    </div>
+                    <div class="info-value">{{ user.address }}</div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="profile-actions">
+                <a href="{% url 'user_profile_edit' %}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i>
+                    Edit Profile
+                </a>
+                <a href="{% url 'login_view' %}" class="btn btn-secondary">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="profile-card">
+            <div class="empty-state">
+                <i class="fas fa-user-slash"></i>
+                <h3>No Profile Found</h3>
+                <p>Please log in to view your profile</p>
+            </div>
+        </div>
+        {% endif %}
+    </section>
+
+    {% include 'footer.html' %}
+</body>
+
+</html>

@@ -1,0 +1,563 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reply to Complaint - DermaScan Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+        }
+
+        #content-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .container-fluid {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-color);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .title-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.8rem;
+        }
+
+        .page-title h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .page-title p {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        /* Reply Card */
+        .reply-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Complaint Display */
+        .complaint-section {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .complaint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .complaint-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--light-text);
+        }
+
+        .meta-item i {
+            color: var(--secondary-color);
+        }
+
+        .status-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(245, 158, 11, 0.1);
+            color: #F59E0B;
+        }
+
+        .complaint-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .complaint-text {
+            font-size: 1rem;
+            color: var(--dark-text);
+            line-height: 1.7;
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 8px;
+        }
+
+        /* Form Section */
+        .form-section {
+            margin-top: 2rem;
+        }
+
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 2px;
+            background: var(--border-color);
+        }
+
+        .section-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: var(--success-color);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.8rem;
+        }
+
+        .form-label i {
+            color: var(--secondary-color);
+        }
+
+        .required {
+            color: #EF4444;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 180px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-textarea:focus {
+            border-color: var(--success-color);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--light-text);
+            margin-top: 0.5rem;
+        }
+
+        .char-counter.warning {
+            color: var(--accent-color);
+        }
+
+        .char-counter.danger {
+            color: #EF4444;
+        }
+
+        /* Helper Text */
+        .helper-text {
+            background: rgba(59, 130, 246, 0.05);
+            border-left: 3px solid #3B82F6;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .helper-text p {
+            color: var(--dark-text);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--light-bg);
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1.2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.4);
+        }
+
+        .btn-cancel {
+            background: var(--light-bg);
+            color: var(--dark-text);
+        }
+
+        .btn-cancel:hover {
+            background: var(--border-color);
+        }
+
+        /* Success Message */
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 1.2rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            display: none;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .success-message.active {
+            display: flex;
+        }
+
+        .success-message i {
+            font-size: 1.5rem;
+            color: var(--success-color);
+        }
+
+        .success-message p {
+            color: var(--success-color);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #content {
+                padding: 1rem;
+            }
+
+            .reply-card {
+                padding: 1.5rem;
+            }
+
+            .complaint-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .complaint-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .page-title {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'admin_header.html' %}
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <div class="container-fluid">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="breadcrumb">
+                        <a href="{% url 'admin_index' %}"><i class="fas fa-home"></i> Dashboard</a>
+                        <i class="fas fa-chevron-right"></i>
+                        <a href="{% url 'complaint' %}">Complaints</a>
+                        <i class="fas fa-chevron-right"></i>
+                        <span>Reply</span>
+                    </div>
+                    <div class="page-title">
+                        <div class="title-icon">
+                            <i class="fas fa-reply"></i>
+                        </div>
+                        <div>
+                            <h1>Reply to Complaint</h1>
+                            <p>Respond to the patient's concern</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Reply sent successfully! The patient has been notified.</p>
+                </div>
+
+                <!-- Reply Card -->
+                <div class="reply-card">
+                    <!-- Original Complaint -->
+                    <div class="complaint-section">
+                        <div class="complaint-header">
+                            <div class="complaint-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-user"></i>
+                                    <span>
+                                        {% if complaint.USER_ID.user_profile.name %}
+                                        {{ complaint.USER_ID.user_profile.name }}
+                                        {% else %}
+                                        {{ complaint.USER_ID.username }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>{{ complaint.Date }}</span>
+                                </div>
+                            </div>
+                            <span class="status-badge">
+                                <i class="fas fa-clock"></i>
+                                Pending Reply
+                            </span>
+                        </div>
+                        <div class="complaint-label">Original Complaint</div>
+                        <div class="complaint-text">
+                            {{ complaint.Complaint_text }}
+                        </div>
+                    </div>
+
+                    <!-- Reply Form Section -->
+                    <div class="form-section">
+                        <div class="section-divider">
+                            <div class="divider-line"></div>
+                            <h2 class="section-title">
+                                <i class="fas fa-comment-dots"></i>
+                                Your Response
+                            </h2>
+                            <div class="divider-line"></div>
+                        </div>
+
+                        <!-- Helper Text -->
+                        <!-- Helper Text -->
+                        {# <div class="helper-text"> #}
+                            {# <p><i class="fas fa-info-circle"></i> <strong>Tips for a good response:</strong> Be #}
+
+                                {# receive your reply via email notification.</p> #}
+                            {# </div> #}
+
+                        <!-- Reply Form -->
+                        <form action="" method="POST" id="replyForm">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-pen"></i>
+                                    Reply Message
+                                    <span class="required">*</span>
+                                </label>
+                                <textarea id="replyText" name="replyText" class="form-textarea"
+                                    placeholder="Type your response to the patient's complaint..." maxlength="1000"
+                                    required></textarea>
+                                <div class="char-counter" id="charCounter">0 / 1000 characters</div>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-cancel" onclick="history.back()">
+                                    <i class="fas fa-times"></i>
+                                    Cancel
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Send Reply
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Character counter
+        const replyText = document.getElementById('replyText');
+        const charCounter = document.getElementById('charCounter');
+
+        replyText.addEventListener('input', function () {
+            const length = this.value.length;
+            charCounter.textContent = `${length} / 1000 characters`;
+
+            if (length > 900) {
+                charCounter.classList.add('danger');
+                charCounter.classList.remove('warning');
+            } else if (length > 800) {
+                charCounter.classList.add('warning');
+                charCounter.classList.remove('danger');
+            } else {
+                charCounter.classList.remove('warning', 'danger');
+            }
+        });
+
+        // Show success message if reply was just sent
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.classList.add('active');
+
+            setTimeout(() => {
+                successMessage.classList.remove('active');
+            }, 5000);
+        }
+
+        // Form submission
+        const replyForm = document.getElementById('replyForm');
+        replyForm.addEventListener('submit', function (e) {
+            const submitBtn = this.querySelector('.btn-primary');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+        });
+
+        // Auto-focus textarea
+        replyText.focus();
+    </script>
+</body>
+
+</html>

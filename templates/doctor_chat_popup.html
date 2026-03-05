@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with {{ receiver.username }}</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --primary-light: #1D7A8C;
+            --accent-color: #F28F3B;
+            --bg-color: #F7F9FC;
+            --white: #ffffff;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --bubble-sent: linear-gradient(135deg, #0A2E5C, #1D7A8C);
+            --bubble-received: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 10;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #FF9966, #FF5E62);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.2rem;
+            border: 2px solid var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-info h3 {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--success-color, #10b981);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            scroll-behavior: smooth;
+        }
+
+        .message-wrapper {
+            display: flex;
+            width: 100%;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Received Message (Patient) */
+        .message-wrapper.received {
+            justify-content: flex-start;
+        }
+
+        .message-wrapper.received .message {
+            background: var(--bubble-received);
+            color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Sent Message (Doctor) */
+        .message-wrapper.sent {
+            justify-content: flex-end;
+        }
+
+        .message-wrapper.sent .message {
+            background: var(--bubble-sent);
+            color: var(--white);
+            border-bottom-right-radius: 4px;
+        }
+
+        .timestamp {
+            font-size: 0.7rem;
+            margin-top: 4px;
+            display: block;
+            opacity: 0.8;
+            text-align: right;
+        }
+
+        .input-area {
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .chat-form {
+            width: 100%;
+            display: flex;
+            gap: 10px;
+            position: relative;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border-radius: 99px;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary-light);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(29, 122, 140, 0.1);
+        }
+
+        .send-btn {
+            background: var(--primary-color);
+            color: var(--white);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 4px 6px rgba(10, 46, 92, 0.2);
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            background: var(--primary-light);
+        }
+
+        /* Scrollbar Styling */
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="chat-header">
+        <div class="user-avatar">
+            <i class="fas fa-user"></i>
+        </div>
+        <div class="header-info">
+            <h3>{{ receiver.name|default:receiver.username }}</h3>
+            <div class="status-indicator">
+                <span class="status-dot"></span>
+                Patient
+            </div>
+        </div>
+    </header>
+
+    <div class="chat-container" id="chatContainer">
+        {% for chat in chats %}
+        <div class="message-wrapper {% if chat.SENDER_ID == request.user %}sent{% else %}received{% endif %}">
+            <div class="message">
+                {% if chat.image %}
+                <img src="{{ chat.image.url }}" alt="Shared Image"
+                    style="max-width: 100%; border-radius: 8px; margin-bottom: 5px; display: block;">
+                {% endif %}
+                {{ chat.message }}
+                <span class="timestamp">{{ chat.timestamp }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="input-area">
+        <form method="post" class="chat-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="image-upload" class="send-btn" style="cursor: pointer; margin-right: 5px;">
+                <i class="fas fa-paperclip"></i>
+            </label>
+            <input type="file" name="image" id="image-upload" style="display: none;" accept="image/*">
+            <input type="text" name="message" class="chat-input" placeholder="Type your message..." required
+                autocomplete="off">
+            <button type="submit" class="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Auto-scroll to bottom
+        const chatContainer = document.getElementById('chatContainer');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        // Focus input on load
+        document.querySelector('.chat-input').focus();
+    </script>
+</body>
+
+</html>

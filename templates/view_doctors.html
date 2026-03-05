@@ -1,0 +1,883 @@
+{#{% include 'user_header.html' %}#}
+{##}
+{#<section id="hero" class="hero section dark-background">#}
+{#  <div class="container-fluid p-0">#}
+{#    <div class="hero-wrapper">#}
+{#      <div class="hero-image">#}
+{#        <img src="../static/assets/img/health/showcase-1.webp" alt="Our Medical Team" class="img-fluid">#}
+{#      </div>#}
+{##}
+{#      <div class="hero-content">#}
+{#        <div class="container">#}
+{#          <div class="row">#}
+{#            <div class="col-lg-10 col-md-12" data-aos="fade-right" data-aos-delay="100">#}
+{#              <div class="content-box">#}
+{#                <span class="badge-accent" data-aos="fade-up" data-aos-delay="150">Our Expert Medical Team</span>#}
+{#                <h1 data-aos="fade-up" data-aos-delay="200">Meet Our Qualified Healthcare Professionals</h1>#}
+{#                <p data-aos="fade-up" data-aos-delay="250">Connect with our experienced doctors dedicated to providing exceptional care. View their schedules and book your appointment today.</p>#}
+{##}
+{##}
+{##}
+{#                <div class="info-badges" data-aos="fade-up" data-aos-delay="350">#}
+{##}
+{##}
+{#                </div>#}
+{#              </div>#}
+{#            </div>#}
+{#          </div>#}
+{##}
+{#          <!-- Doctors Table Section -->#}
+{#          <div class="doctors-wrapper" data-aos="fade-up" data-aos-delay="400">#}
+{#            <div class="table-container">#}
+{#              <table class="doctors-table">#}
+{#                <thead>#}
+{#                  <tr>#}
+{#                    <th><i class="bi bi-person-badge"></i> Doctor</th>#}
+{#                    <th><i class="bi bi-telephone"></i> Phone</th>#}
+{#                    <th><i class="bi bi-envelope"></i> Email</th>#}
+{#                    <th><i class="bi bi-geo-alt"></i> Address</th>#}
+{#                    <th><i class="bi bi-calendar-check"></i> Schedule</th>#}
+{#                  </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                  {% for d in doctor %}#}
+{#                  <tr>#}
+{#                    <td class="doctor-name">{{ d.name }}</td>#}
+{#                    <td>{{ d.phone }}</td>#}
+{#                    <td>{{ d.email }}</td>#}
+{#                    <td>{{ d.address }}</td>#}
+{#                    <td>#}
+{#                      <a href="{% url 'view_schedule' d.id %}" class="schedule-btn">#}
+{#                        <i class="bi bi-calendar-check"></i>#}
+{#                        View Schedule#}
+{#                      </a>#}
+{#                    </td>#}
+{#                  </tr>#}
+{#                  {% endfor %}#}
+{#                </tbody>#}
+{#              </table>#}
+{#            </div>#}
+{#          </div>#}
+{##}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</section>#}
+{##}
+{#<style>#}
+{#  .hero .hero-wrapper {#}
+{#    min-height: 100vh;#}
+{#    display: flex;#}
+{#    position: relative;#}
+{#    overflow: hidden;#}
+{#  }#}
+{##}
+{#  .hero-image {#}
+{#    position: absolute;#}
+{#    top: 0;#}
+{#    left: 0;#}
+{#    width: 100%;#}
+{#    height: 100%;#}
+{#    z-index: 0;#}
+{#  }#}
+{##}
+{#  .hero-image img {#}
+{#    width: 100%;#}
+{#    height: 100%;#}
+{#    object-fit: cover;#}
+{#    filter: brightness(0.4);#}
+{#  }#}
+{##}
+{#  .hero-content {#}
+{#    position: relative;#}
+{#    z-index: 1;#}
+{#    display: flex;#}
+{#    align-items: center;#}
+{#    width: 100%;#}
+{#    padding: 80px 0;#}
+{#  }#}
+{##}
+{#  .content-box {#}
+{#    color: white;#}
+{#    margin-bottom: 60px;#}
+{#  }#}
+{##}
+{#  .badge-accent {#}
+{#    display: inline-block;#}
+{#    background: rgba(255, 255, 255, 0.15);#}
+{#    backdrop-filter: blur(10px);#}
+{#    color: white;#}
+{#    padding: 8px 20px;#}
+{#    border-radius: 30px;#}
+{#    font-size: 14px;#}
+{#    font-weight: 500;#}
+{#    margin-bottom: 20px;#}
+{#    border: 1px solid rgba(255, 255, 255, 0.2);#}
+{#  }#}
+{##}
+{#  .content-box h1 {#}
+{#    font-size: 3rem;#}
+{#    font-weight: 700;#}
+{#    margin-bottom: 20px;#}
+{#    line-height: 1.2;#}
+{#    color: white;#}
+{#  }#}
+{##}
+{#  .content-box p {#}
+{#    font-size: 1.1rem;#}
+{#    margin-bottom: 30px;#}
+{#    opacity: 0.9;#}
+{#    line-height: 1.6;#}
+{#  }#}
+{##}
+{#  .cta-group {#}
+{#    display: flex;#}
+{#    gap: 15px;#}
+{#    margin-bottom: 30px;#}
+{#    flex-wrap: wrap;#}
+{#  }#}
+{##}
+{#  .btn {#}
+{#    padding: 12px 30px;#}
+{#    border-radius: 30px;#}
+{#    font-weight: 600;#}
+{#    text-decoration: none;#}
+{#    transition: all 0.3s ease;#}
+{#    display: inline-flex;#}
+{#    align-items: center;#}
+{#    gap: 8px;#}
+{#  }#}
+{##}
+{#  .btn-primary {#}
+{#    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);#}
+{#    color: white;#}
+{#    border: none;#}
+{#  }#}
+{##}
+{#  .btn-primary:hover {#}
+{#    transform: translateY(-2px);#}
+{#    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);#}
+{#  }#}
+{##}
+{#  .btn-outline {#}
+{#    background: rgba(255, 255, 255, 0.1);#}
+{#    color: white;#}
+{#    border: 2px solid rgba(255, 255, 255, 0.3);#}
+{#    backdrop-filter: blur(10px);#}
+{#  }#}
+{##}
+{#  .btn-outline:hover {#}
+{#    background: rgba(255, 255, 255, 0.2);#}
+{#    border-color: white;#}
+{#  }#}
+{##}
+{#  .info-badges {#}
+{#    display: flex;#}
+{#    gap: 30px;#}
+{#    flex-wrap: wrap;#}
+{#  }#}
+{##}
+{#  .badge-item {#}
+{#    display: flex;#}
+{#    align-items: center;#}
+{#    gap: 15px;#}
+{#    background: rgba(255, 255, 255, 0.1);#}
+{#    padding: 15px 25px;#}
+{#    border-radius: 15px;#}
+{#    backdrop-filter: blur(10px);#}
+{#    border: 1px solid rgba(255, 255, 255, 0.2);#}
+{#  }#}
+{##}
+{#  .badge-item i {#}
+{#    font-size: 24px;#}
+{#    color: #667eea;#}
+{#  }#}
+{##}
+{#  .badge-content span {#}
+{#    display: block;#}
+{#    font-size: 12px;#}
+{#    opacity: 0.8;#}
+{#  }#}
+{##}
+{#  .badge-content strong {#}
+{#    display: block;#}
+{#    font-size: 16px;#}
+{#    font-weight: 600;#}
+{#  }#}
+{##}
+{#  /* Doctors Table Styling */#}
+{#  .doctors-wrapper {#}
+{#    margin-top: 40px;#}
+{#  }#}
+{##}
+{#  .table-container {#}
+{#    background: rgba(255, 255, 255, 0.1);#}
+{#    backdrop-filter: blur(20px);#}
+{#    border: 1px solid rgba(255, 255, 255, 0.2);#}
+{#    border-radius: 20px;#}
+{#    padding: 30px;#}
+{#    overflow-x: auto;#}
+{#  }#}
+{##}
+{#  .doctors-table {#}
+{#    width: 100%;#}
+{#    border-collapse: separate;#}
+{#    border-spacing: 0 15px;#}
+{#  }#}
+{##}
+{#  .doctors-table thead tr {#}
+{#    background: rgba(102, 126, 234, 0.3);#}
+{#    border-radius: 10px;#}
+{#  }#}
+{##}
+{#  .doctors-table th {#}
+{#    color: white;#}
+{#    font-weight: 600;#}
+{#    font-size: 14px;#}
+{#    text-transform: uppercase;#}
+{#    letter-spacing: 0.5px;#}
+{#    padding: 15px 20px;#}
+{#    text-align: left;#}
+{#    border: none;#}
+{#  }#}
+{##}
+{#  .doctors-table th:first-child {#}
+{#    border-top-left-radius: 10px;#}
+{#    border-bottom-left-radius: 10px;#}
+{#  }#}
+{##}
+{#  .doctors-table th:last-child {#}
+{#    border-top-right-radius: 10px;#}
+{#    border-bottom-right-radius: 10px;#}
+{#  }#}
+{##}
+{#  .doctors-table th i {#}
+{#    margin-right: 8px;#}
+{#    color: #667eea;#}
+{#  }#}
+{##}
+{#  .doctors-table tbody tr {#}
+{#    background: rgba(255, 255, 255, 0.05);#}
+{#    transition: all 0.3s ease;#}
+{#  }#}
+{##}
+{#  .doctors-table tbody tr:hover {#}
+{#    background: rgba(255, 255, 255, 0.15);#}
+{#    transform: scale(1.02);#}
+{#    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);#}
+{#  }#}
+{##}
+{#  .doctors-table td {#}
+{#    color: rgba(255, 255, 255, 0.9);#}
+{#    padding: 20px;#}
+{#    border: none;#}
+{#    font-size: 14px;#}
+{#  }#}
+{##}
+{#  .doctors-table tbody tr td:first-child {#}
+{#    border-top-left-radius: 10px;#}
+{#    border-bottom-left-radius: 10px;#}
+{#  }#}
+{##}
+{#  .doctors-table tbody tr td:last-child {#}
+{#    border-top-right-radius: 10px;#}
+{#    border-bottom-right-radius: 10px;#}
+{#  }#}
+{##}
+{#  .doctor-name {#}
+{#    font-weight: 600;#}
+{#    font-size: 16px;#}
+{#    color: white !important;#}
+{#  }#}
+{##}
+{#  .schedule-btn {#}
+{#    display: inline-flex;#}
+{#    align-items: center;#}
+{#    gap: 8px;#}
+{#    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);#}
+{#    color: white;#}
+{#    padding: 8px 18px;#}
+{#    border-radius: 25px;#}
+{#    text-decoration: none;#}
+{#    font-weight: 500;#}
+{#    font-size: 13px;#}
+{#    transition: all 0.3s ease;#}
+{#    border: none;#}
+{#    white-space: nowrap;#}
+{#  }#}
+{##}
+{#  .schedule-btn:hover {#}
+{#    transform: translateY(-2px);#}
+{#    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);#}
+{#  }#}
+{##}
+{#  .schedule-btn i {#}
+{#    font-size: 16px;#}
+{#  }#}
+{##}
+{#  /* Responsive Design */#}
+{#  @media (max-width: 992px) {#}
+{#    .content-box h1 {#}
+{#      font-size: 2.2rem;#}
+{#    }#}
+{##}
+{#    .table-container {#}
+{#      padding: 20px;#}
+{#    }#}
+{##}
+{#    .doctors-table th,#}
+{#    .doctors-table td {#}
+{#      padding: 15px;#}
+{#      font-size: 13px;#}
+{#    }#}
+{#  }#}
+{##}
+{#  @media (max-width: 768px) {#}
+{#    .content-box h1 {#}
+{#      font-size: 1.8rem;#}
+{#    }#}
+{##}
+{#    .cta-group {#}
+{#      flex-direction: column;#}
+{#    }#}
+{##}
+{#    .btn {#}
+{#      width: 100%;#}
+{#      justify-content: center;#}
+{#    }#}
+{##}
+{#    .info-badges {#}
+{#      flex-direction: column;#}
+{#    }#}
+{##}
+{#    .badge-item {#}
+{#      width: 100%;#}
+{#    }#}
+{##}
+{#    .table-container {#}
+{#      padding: 15px;#}
+{#      overflow-x: scroll;#}
+{#    }#}
+{##}
+{#    .doctors-table {#}
+{#      min-width: 700px;#}
+{#    }#}
+{##}
+{#    .doctors-table th,#}
+{#    .doctors-table td {#}
+{#      padding: 12px 10px;#}
+{#      font-size: 12px;#}
+{#    }#}
+{##}
+{#    .schedule-btn {#}
+{#      padding: 6px 12px;#}
+{#      font-size: 12px;#}
+{#    }#}
+{#  }#}
+{#</style>#}
+{##}
+{#{% include 'footer.html' %}#}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Doctors - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+            --gradient-2: linear-gradient(135deg, #F28F3B 0%, #FF6B35 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--gradient-1);
+            padding: 4rem 2rem 3rem;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
+            line-height: 1.8;
+        }
+
+        /* Doctors Section */
+        .doctors-section {
+            max-width: 1400px;
+            margin: -3rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .doctor-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border-color: var(--accent-color);
+        }
+
+        .doctor-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .doctor-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 2rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+            position: relative;
+        }
+
+        .doctor-avatar::after {
+            content: '';
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            width: 20px;
+            height: 20px;
+            background: var(--success-color);
+            border: 3px solid var(--white);
+            border-radius: 50%;
+        }
+
+        .doctor-info h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .doctor-specialty {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(29, 122, 140, 0.1);
+            color: var(--secondary-color);
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .doctor-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: start;
+            gap: 0.8rem;
+        }
+
+        .detail-icon {
+            width: 35px;
+            height: 35px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            flex-shrink: 0;
+            font-size: 0.95rem;
+        }
+
+        .detail-content {
+            flex: 1;
+        }
+
+        .detail-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.2rem;
+        }
+
+        .detail-value {
+            font-size: 0.95rem;
+            color: var(--dark-text);
+            line-height: 1.5;
+        }
+
+        .doctor-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn-schedule {
+            flex: 1;
+            padding: 1rem;
+            background: var(--gradient-1);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .btn-schedule:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.4);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--light-text);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.8rem;
+            margin: 0 auto 1rem;
+        }
+
+        .stat-value {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 3rem 1rem 2rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .doctors-section {
+                padding: 0 1rem;
+                margin: -2rem auto 2rem;
+            }
+
+            .doctors-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-section {
+                padding: 0 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'user_header.html' %}
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-container">
+            <span class="page-badge">
+                <i class="fas fa-stethoscope"></i>
+                Our Medical Team
+            </span>
+            <h1>Meet Our Expert Doctors</h1>
+            <p>Connect with our experienced dermatologists dedicated to providing exceptional care. View their schedules and book your appointment today.</p>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="stat-value">{{ doctor|length }}</div>
+                <div class="stat-label">Available Doctors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-award"></i>
+                </div>
+                <div class="stat-value">{{ total_reviews }}</div>
+                <div class="stat-label">Total Reviews</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-value">{{ overall_avg_rating|floatformat:1 }}</div>
+                <div class="stat-label">Average Rating</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Doctors Section -->
+    <section class="doctors-section">
+        {% if doctor %}
+        <div class="doctors-grid">
+            {% for d in doctor %}
+            <div class="doctor-card">
+                <div class="doctor-header">
+                    <div class="doctor-avatar">
+                        {{ d.name|slice:":2"|upper }}
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. {{ d.name }}</h3>
+                        <span class="doctor-specialty">Dermatologist</span>
+                        <div class="doctor-specialty">Rating: {{ d.avg_rating|default_if_none:0|floatformat:1 }} ({{ d.review_count }} reviews)</div>
+                    </div>
+                </div>
+
+                <div class="doctor-details">
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="detail-content">
+                            <div class="detail-label">Phone</div>
+                            <div class="detail-value">{{ d.phone }}</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="detail-content">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value">{{ d.email }}</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="detail-content">
+                            <div class="detail-label">Address</div>
+                            <div class="detail-value">{{ d.address }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doctor-actions">
+                    <a href="{% url 'view_schedule' d.id %}" class="btn-schedule">
+                        <i class="fas fa-calendar-check"></i>
+                        View Schedule & Book
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-user-md"></i>
+            <h3>No Doctors Available</h3>
+            <p>Please check back later for available doctors</p>
+        </div>
+        {% endif %}
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script>
+        // Animate cards on load
+        const doctorCards = document.querySelectorAll('.doctor-card');
+        if (doctorCards.length > 0) {
+            doctorCards.forEach((card, index) => {
+                card.style.animation = `slideUp 0.5s ease-out ${index * 0.1}s backwards`;
+            });
+        }
+
+        // Animate stat cards
+        const statCards = document.querySelectorAll('.stat-card');
+        if (statCards.length > 0) {
+            statCards.forEach((card, index) => {
+                card.style.animation = `slideUp 0.5s ease-out ${index * 0.05}s backwards`;
+            });
+        }
+    </script>
+</body>
+</html>

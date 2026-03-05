@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --danger-color: #EF4444;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+            --gradient-2: linear-gradient(135deg, #F28F3B 0%, #FF6B35 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--white);
+        }
+
+        /* Register Section */
+        .register-section {
+            flex: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #F7F9FC 0%, #E8F1F8 100%);
+            padding: 7rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(29, 122, 140, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-50px) rotate(180deg);
+            }
+        }
+
+        .register-container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            background: var(--white);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Left Side - Branding */
+        .register-brand {
+            background: var(--gradient-2);
+            padding: 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-brand::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.5;
+        }
+
+        .brand-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .brand-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .brand-logo-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .brand-logo-icon svg {
+            width: 45px;
+            height: 45px;
+        }
+
+        .brand-logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .brand-logo-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .brand-logo-subtitle {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: var(--white);
+            opacity: 0.9;
+        }
+
+        .brand-tagline {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .brand-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: left;
+        }
+
+        .brand-feature {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+        }
+
+        .brand-feature i {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .brand-feature-text h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .brand-feature-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Right Side - Form */
+        .register-form-section {
+            padding: 3rem 3rem;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .register-form-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .register-form-section::-webkit-scrollbar-track {
+            background: var(--light-bg);
+            border-radius: 10px;
+        }
+
+        .register-form-section::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 10px;
+        }
+
+        .form-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-header h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        /* Messages */
+        .message-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .alert {
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            border: 2px solid var(--success-color);
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+            border: 2px solid var(--danger-color);
+        }
+
+        .alert i {
+            font-size: 1.2rem;
+        }
+
+        /* Form Styles */
+        .register-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--dark-text);
+            font-size: 0.9rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 2.8rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--white);
+            color: var(--dark-text);
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea {
+            padding: 0.9rem 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group select {
+            padding: 0.9rem 1rem 0.9rem 2.8rem;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 4px rgba(29, 122, 140, 0.1);
+        }
+
+        .form-group:focus-within .input-icon {
+            color: var(--secondary-color);
+            transform: translateY(-50%) scale(1.1);
+            transition: all 0.3s ease;
+        }
+
+        /* Password Strength Meter */
+        .password-strength-container {
+            margin-top: 0.5rem;
+        }
+
+        .strength-meter {
+            height: 4px;
+            background: #E5E7EB;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 0.3rem;
+        }
+
+        .strength-meter-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .strength-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .strength-low {
+            background: var(--danger-color);
+            width: 25%;
+        }
+
+        .strength-medium {
+            background: #FBBF24;
+            width: 50%;
+        }
+
+        .strength-high {
+            background: #3B82F6;
+            width: 75%;
+        }
+
+        .strength-strong {
+            background: var(--success-color);
+            width: 100%;
+        }
+
+        @keyframes pulse-focus {
+            0% {
+                box-shadow: 0 0 0 0 rgba(29, 122, 140, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(29, 122, 140, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(29, 122, 140, 0);
+            }
+        }
+
+        .form-group input:focus {
+            animation: pulse-focus 2s infinite;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--light-text);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--light-text);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .invalid-feedback {
+            display: none;
+            color: var(--danger-color);
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        .form-group input.is-invalid,
+        .form-group textarea.is-invalid,
+        .form-group select.is-invalid {
+            border-color: var(--danger-color);
+        }
+
+        .form-group input.is-invalid~.invalid-feedback,
+        .form-group textarea.is-invalid~.invalid-feedback,
+        .form-group select.is-invalid~.invalid-feedback {
+            display: block;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: start;
+            gap: 0.6rem;
+            margin: 1rem 0;
+        }
+
+        .form-check input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--accent-color);
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+        }
+
+        .form-check label {
+            font-size: 0.95rem;
+            color: var(--dark-text);
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        .form-check a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-check a:hover {
+            color: var(--accent-color);
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient-2);
+            border: none;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.05rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(242, 143, 59, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(242, 143, 59, 0.4);
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.2rem 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #E5E7EB;
+        }
+
+        .divider span {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .login-link {
+            text-align: center;
+            padding: 1rem;
+            background: var(--light-bg);
+            border-radius: 12px;
+            color: var(--dark-text);
+            font-size: 0.95rem;
+        }
+
+        .login-link a {
+            color: var(--secondary-color);
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .register-container {
+                grid-template-columns: 1fr;
+            }
+
+            .register-brand {
+                padding: 3rem 2rem;
+            }
+
+            .brand-features {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .brand-feature {
+                flex: 1;
+                min-width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .register-section {
+                padding: 5rem 1rem 1rem;
+            }
+
+            .register-brand {
+                display: none;
+            }
+
+            .register-form-section {
+                padding: 2.5rem 2rem;
+            }
+
+            .form-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'navigation_header.html' %}
+
+    <section class="register-section">
+        <div class="register-container">
+            <!-- Left Side - Branding -->
+            <div class="register-brand">
+                <div class="brand-content">
+                    <div class="brand-logo">
+                        <div class="brand-logo-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g id="iconCarrier">
+                                    <path d="M22 22L2 22" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round"></path>
+                                    <path
+                                        d="M17 22V6C17 4.11438 17 3.17157 16.4142 2.58579C15.8284 2 14.8856 2 13 2H11C9.11438 2 8.17157 2 7.58579 2.58579C7 3.17157 7 4.11438 7 6V22"
+                                        stroke="currentColor" stroke-width="1.5"></path>
+                                    <path opacity="0.5"
+                                        d="M21 22V8.5C21 7.09554 21 6.39331 20.6629 5.88886C20.517 5.67048 20.3295 5.48298 20.1111 5.33706C19.6067 5 18.9045 5 17.5 5"
+                                        stroke="currentColor" stroke-width="1.5"></path>
+                                    <path opacity="0.5"
+                                        d="M3 22V8.5C3 7.09554 3 6.39331 3.33706 5.88886C3.48298 5.67048 3.67048 5.48298 3.88886 5.33706C4.39331 5 5.09554 5 6.5 5"
+                                        stroke="currentColor" stroke-width="1.5"></path>
+                                    <path d="M12 22V19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                                    </path>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="brand-logo-text">
+                            <span class="brand-logo-title">DermaScan</span>
+                            <span class="brand-logo-subtitle">AI</span>
+                        </div>
+                    </div>
+                    <p class="brand-tagline">Start your journey to better skin health</p>
+                    <div class="brand-features">
+                        <div class="brand-feature">
+                            <i class="fas fa-camera"></i>
+                            <div class="brand-feature-text">
+                                <h4>Instant AI Diagnosis</h4>
+                                <p>Upload photos for quick analysis</p>
+                            </div>
+                        </div>
+                        <div class="brand-feature">
+                            <i class="fas fa-user-md"></i>
+                            <div class="brand-feature-text">
+                                <h4>Expert Consultation</h4>
+                                <p>Connect with dermatologists</p>
+                            </div>
+                        </div>
+                        <div class="brand-feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <div class="brand-feature-text">
+                                <h4>Private & Secure</h4>
+                                <p>Your data is protected</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Form -->
+            <div class="register-form-section">
+                <div class="form-header">
+                    <h2>Patient Registration</h2>
+                    <p>Create your account to get started</p>
+                </div>
+
+                {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'error' }}">
+                        <i
+                            class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form class="register-form" action="/user_register/" method="POST" id="registerForm">
+                    {% csrf_token %}
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-user"></i>
+                                <input type="text" name="name" id="name" placeholder="John Doe" required>
+                            </div>
+                            <span class="invalid-feedback">Please enter your full name.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username">Username *</label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-at"></i>
+                                <input type="text" name="username" id="username" placeholder="johndoe" required>
+                            </div>
+                            <span class="invalid-feedback">Please enter a username.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age">Age *</label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-calendar"></i>
+                                <input type="number" name="age" id="age" min="1" max="150" placeholder="25" required>
+                            </div>
+                            <span class="invalid-feedback">Please enter your age.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gender">Gender *</label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-venus-mars"></i>
+                                <select name="gender" id="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <span class="invalid-feedback">Please select your gender.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-envelope"></i>
+                                <input type="email" name="email" id="email" placeholder="john@example.com" required>
+                            </div>
+                            <span class="invalid-feedback">Please enter a valid email address.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-phone"></i>
+                                <input type="tel" name="phone" id="phone" placeholder="98765 43210" required>
+                            </div>
+                            <span class="invalid-feedback">Please enter your phone number.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address *</label>
+                        <textarea name="address" id="address" rows="3" placeholder="Enter your complete address"
+                            required></textarea>
+                        <span class="invalid-feedback">Please enter your address.</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password">Password *</label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-lock"></i>
+                                <input type="password" name="password" id="password"
+                                    placeholder="Create a strong password" required>
+                                <button type="button" class="password-toggle" id="passwordToggle">
+                                    <i class="fas fa-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                            <span class="invalid-feedback">Please enter a password.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password *</label>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-lock"></i>
+                                <input type="password" name="confirm_password" id="confirm_password"
+                                    placeholder="Confirm your password" required>
+                                <button type="button" class="password-toggle" id="confirmPasswordToggle">
+                                    <i class="fas fa-eye" id="confirmToggleIcon"></i>
+                                </button>
+                            </div>
+                            <span class="invalid-feedback">Passwords do not match.</span>
+                        </div>
+                    </div>
+
+                    <div class="password-strength-container" id="strengthContainer" style="display: none;">
+                        <div class="strength-meter">
+                            <div class="strength-meter-fill" id="strengthFill"></div>
+                        </div>
+                        <div class="strength-text">
+                            <span id="strengthLabel">Password Security</span>
+                            <span id="strengthValue"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">
+                            I agree to the <a href="#">terms and conditions</a> and privacy policy
+                        </label>
+                        <span class="invalid-feedback">You must agree before submitting.</span>
+                    </div>
+
+                    <button type="submit" class="btn-register">
+                        <i class="fas fa-user-plus"></i>
+                        Create Account
+                    </button>
+
+                    <div class="divider">
+                        <span>Already have an account?</span>
+                    </div>
+
+                    <div class="login-link">
+                        <a href="/login_view/">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login to your account
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script>
+        // Password toggle functionality
+        const passwordToggle = document.getElementById('passwordToggle');
+        const passwordInput = document.getElementById('password');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
+        const confirmPasswordInput = document.getElementById('confirm_password');
+        const confirmToggleIcon = document.getElementById('confirmToggleIcon');
+
+        if (passwordToggle && passwordInput && toggleIcon) {
+            passwordToggle.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+
+                if (type === 'password') {
+                    toggleIcon.classList.remove('fa-eye-slash');
+                    toggleIcon.classList.add('fa-eye');
+                } else {
+                    toggleIcon.classList.remove('fa-eye');
+                    toggleIcon.classList.add('fa-eye-slash');
+                }
+            });
+        }
+
+        if (confirmPasswordToggle && confirmPasswordInput && confirmToggleIcon) {
+            confirmPasswordToggle.addEventListener('click', function () {
+                const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPasswordInput.setAttribute('type', type);
+
+                if (type === 'password') {
+                    confirmToggleIcon.classList.remove('fa-eye-slash');
+                    confirmToggleIcon.classList.add('fa-eye');
+                } else {
+                    confirmToggleIcon.classList.remove('fa-eye');
+                    confirmToggleIcon.classList.add('fa-eye-slash');
+                }
+            });
+        }
+
+        // Form validation
+        const registerForm = document.getElementById('registerForm');
+        if (registerForm) {
+            registerForm.addEventListener('submit', function (e) {
+                let isValid = true;
+
+                // Clear previous validation
+                document.querySelectorAll('.is-invalid').forEach(el => {
+                    el.classList.remove('is-invalid');
+                });
+
+                // Validate all required fields
+                const requiredFields = registerForm.querySelectorAll('[required]');
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        field.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                });
+
+                // Validate email
+                const email = document.getElementById('email');
+                if (email && email.value && !email.validity.valid) {
+                    email.classList.add('is-invalid');
+                    isValid = false;
+                }
+
+                // Validate age
+                const age = document.getElementById('age');
+                if (age && age.value) {
+                    const ageValue = parseInt(age.value);
+                    if (ageValue < 1 || ageValue > 150) {
+                        age.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                }
+
+                // Validate password match
+                if (passwordInput && confirmPasswordInput) {
+                    if (passwordInput.value !== confirmPasswordInput.value) {
+                        confirmPasswordInput.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                }
+
+                // Validate terms checkbox
+                const terms = document.getElementById('terms');
+                if (terms && !terms.checked) {
+                    terms.classList.add('is-invalid');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                    // Scroll to first error
+                    const firstError = document.querySelector('.is-invalid');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else {
+                    const submitBtn = registerForm.querySelector('.btn-register');
+                    if (submitBtn) {
+                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+                        submitBtn.disabled = true;
+                    }
+                }
+            });
+
+            // Real-time validation for password match
+            if (confirmPasswordInput && passwordInput) {
+                confirmPasswordInput.addEventListener('input', function () {
+                    if (this.value && passwordInput.value !== this.value) {
+                        this.classList.add('is-invalid');
+                    } else {
+                        this.classList.remove('is-invalid');
+                    }
+                });
+            }
+        }
+
+        // Auto-hide messages after 5 seconds
+        const alerts = document.querySelectorAll('.alert');
+        if (alerts.length > 0) {
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.animation = 'slideDown 0.3s ease-out reverse';
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 300);
+                }, 5000);
+            });
+        }
+
+        // Phone Auto-formatting (India Style)
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function (e) {
+                let x = e.target.value.replace(/\D/g, '');
+
+                // If it starts with 91, treat it as country code
+                if (x.startsWith('91')) {
+                    if (x.length > 2) {
+                        let country = x.substring(0, 2);
+                        let first = x.substring(2, 7);
+                        let last = x.substring(7, 12);
+                        e.target.value = '+91 ' + first + (last ? ' ' + last : '');
+                    } else {
+                        e.target.value = '+91';
+                    }
+                } else {
+                    // 10 digit format: XXXXX XXXXX
+                    let first = x.substring(0, 5);
+                    let last = x.substring(5, 10);
+                    e.target.value = first + (last ? ' ' + last : '');
+                }
+            });
+        }
+
+        // Password Strength Logic
+        if (passwordInput) {
+            const strengthContainer = document.getElementById('strengthContainer');
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthValue = document.getElementById('strengthValue');
+
+            passwordInput.addEventListener('input', function () {
+                const val = this.value;
+                if (val) {
+                    strengthContainer.style.display = 'block';
+                    let strength = 0;
+                    if (val.length >= 8) strength++;
+                    if (val.match(/[a-z]/) && val.match(/[A-Z]/)) strength++;
+                    if (val.match(/\d/)) strength++;
+                    if (val.match(/[^a-zA-Z\d]/)) strength++;
+
+                    strengthFill.className = 'strength-meter-fill';
+
+                    if (strength === 1) {
+                        strengthFill.classList.add('strength-low');
+                        strengthValue.innerText = 'Weak';
+                        strengthValue.style.color = 'var(--danger-color)';
+                    } else if (strength === 2) {
+                        strengthFill.classList.add('strength-medium');
+                        strengthValue.innerText = 'Fair';
+                        strengthValue.style.color = '#FBBF24';
+                    } else if (strength === 3) {
+                        strengthFill.classList.add('strength-high');
+                        strengthValue.innerText = 'Good';
+                        strengthValue.style.color = '#3B82F6';
+                    } else if (strength >= 4) {
+                        strengthFill.classList.add('strength-strong');
+                        strengthValue.innerText = 'Strong';
+                        strengthValue.style.color = 'var(--success-color)';
+                    } else {
+                        strengthFill.style.width = '0%';
+                        strengthValue.innerText = 'Very Weak';
+                    }
+                } else {
+                    strengthContainer.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,608 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Doctor - DermaScan AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--gradient-1);
+            padding: 4rem 2rem 3rem;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        }
+
+        .header-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .page-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            color: var(--white);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .page-header h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .doctor-name {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 1rem;
+        }
+
+        /* Rating Section */
+        .rating-section {
+            max-width: 800px;
+            margin: -3rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .rating-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Doctor Info */
+        .doctor-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--light-bg);
+            border-radius: 16px;
+            margin-bottom: 2.5rem;
+        }
+
+        .doctor-avatar {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .doctor-details h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .doctor-specialty {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        /* Star Rating */
+        .rating-group {
+            margin-bottom: 2.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .star-input {
+            display: none;
+        }
+
+        .star-label {
+            font-size: 3rem;
+            color: var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .star-label:hover,
+        .star-input:checked~.star-label,
+        .star-label.active {
+            color: var(--warning-color);
+            transform: scale(1.2);
+        }
+
+        .rating-text {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-top: 1rem;
+            min-height: 30px;
+        }
+
+        /* Review Textarea */
+        .review-group {
+            margin-bottom: 2rem;
+        }
+
+        .textarea-wrapper {
+            position: relative;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 150px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-textarea:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(29, 122, 140, 0.1);
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--light-text);
+            margin-top: 0.5rem;
+        }
+
+        .char-counter.warning {
+            color: var(--warning-color);
+        }
+
+        .char-counter.danger {
+            color: #EF4444;
+        }
+
+        /* Submit Button */
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1.2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .btn-submit {
+            background: var(--gradient-1);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.4);
+        }
+
+        .btn-cancel {
+            background: var(--light-bg);
+            color: var(--dark-text);
+        }
+
+        .btn-cancel:hover {
+            background: var(--border-color);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3B82F6;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .info-box p {
+            color: var(--dark-text);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .rating-card {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 3rem 1rem 2rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .doctor-name {
+                font-size: 1.4rem;
+            }
+
+            .rating-section {
+                padding: 0 1rem;
+                margin: -2rem auto 2rem;
+            }
+
+            .rating-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .star-label {
+                font-size: 2.5rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'user_header.html' %}
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-container">
+            <div class="page-icon">
+                <i class="fas fa-star"></i>
+            </div>
+            <h1>Rate Your Experience</h1>
+            <p class="doctor-name">Dr. {{ doctor.name }}</p>
+            <p>Your feedback helps us improve our services</p>
+        </div>
+    </section>
+
+    <!-- Rating Section -->
+    <section class="rating-section">
+        <div class="rating-card">
+            <!-- Doctor Info -->
+            <div class="doctor-info">
+                <div class="doctor-avatar">
+                    {{ doctor.name|slice:":2"|upper }}
+                </div>
+                <div class="doctor-details">
+                    <h3>Dr. {{ doctor.name }}</h3>
+                    <p class="doctor-specialty">Dermatologist</p>
+                </div>
+            </div>
+
+            <!-- Info Box -->
+            <div class="info-box">
+                <p><i class="fas fa-info-circle"></i> Your honest feedback helps us maintain quality care and helps
+                    other patients make informed decisions.</p>
+            </div>
+
+            <!-- Rating Form -->
+            <form method="POST" id="ratingForm">
+                {% csrf_token %}
+
+                <!-- Star Rating -->
+                <div class="rating-group">
+                    <label class="form-label">
+                        <i class="fas fa-star"></i> Rate Your Experience
+                    </label>
+
+                    <div class="star-rating" id="starRating">
+                        {% if existing_rating.stars == 1 %}
+                        <input type="radio" name="stars" value="1" id="star1" class="star-input" required checked>
+                        {% else %}
+                        <input type="radio" name="stars" value="1" id="star1" class="star-input" required>
+                        {% endif %}
+                        <label for="star1" class="star-label" data-rating="1">
+                            <i class="fas fa-star"></i>
+                        </label>
+
+                        {% if existing_rating.stars == 2 %}
+                        <input type="radio" name="stars" value="2" id="star2" class="star-input" checked>
+                        {% else %}
+                        <input type="radio" name="stars" value="2" id="star2" class="star-input">
+                        {% endif %}
+                        <label for="star2" class="star-label" data-rating="2">
+                            <i class="fas fa-star"></i>
+                        </label>
+
+                        {% if existing_rating.stars == 3 %}
+                        <input type="radio" name="stars" value="3" id="star3" class="star-input" checked>
+                        {% else %}
+                        <input type="radio" name="stars" value="3" id="star3" class="star-input">
+                        {% endif %}
+                        <label for="star3" class="star-label" data-rating="3">
+                            <i class="fas fa-star"></i>
+                        </label>
+
+                        {% if existing_rating.stars == 4 %}
+                        <input type="radio" name="stars" value="4" id="star4" class="star-input" checked>
+                        {% else %}
+                        <input type="radio" name="stars" value="4" id="star4" class="star-input">
+                        {% endif %}
+                        <label for="star4" class="star-label" data-rating="4">
+                            <i class="fas fa-star"></i>
+                        </label>
+
+                        {% if existing_rating.stars == 5 %}
+                        <input type="radio" name="stars" value="5" id="star5" class="star-input" checked>
+                        {% else %}
+                        <input type="radio" name="stars" value="5" id="star5" class="star-input">
+                        {% endif %}
+                        <label for="star5" class="star-label" data-rating="5">
+                            <i class="fas fa-star"></i>
+                        </label>
+                    </div>
+
+                    <div class="rating-text" id="ratingText"></div>
+                </div>
+
+                <!-- Review Textarea -->
+                <div class="review-group">
+                    <label class="form-label">
+                        <i class="fas fa-comment-dots"></i> Share Your Experience
+                    </label>
+                    <div class="textarea-wrapper">
+                        <textarea name="review" id="reviewText" class="form-textarea"
+                            placeholder="Tell us about your experience with Dr. {{ doctor.name }}. What did you like? How was the consultation?"
+                            maxlength="500" required>{{ existing_rating.review|default:"" }}</textarea>
+                        <div class="char-counter" id="charCounter">0 / 500 characters</div>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel" onclick="history.back()">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-submit">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Rating
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        // Star rating functionality
+        const stars = document.querySelectorAll('.star-label');
+        const ratingText = document.getElementById('ratingText');
+        const starRatingContainer = document.getElementById('starRating');
+        const ratingTexts = {
+            1: 'Poor - Not satisfied',
+            2: 'Fair - Could be better',
+            3: 'Good - Satisfied',
+            4: 'Very Good - Highly satisfied',
+            5: 'Excellent - Outstanding experience!'
+        };
+
+        // Initialize stars if existing rating is present
+        function initializeStars() {
+            const checkedStar = document.querySelector('.star-input:checked');
+            if (checkedStar) {
+                const rating = checkedStar.value;
+                ratingText.textContent = ratingTexts[rating];
+                stars.forEach(s => {
+                    if (parseInt(s.getAttribute('data-rating')) <= parseInt(rating)) {
+                        s.classList.add('active');
+                        s.style.color = '#F59E0B';
+                    } else {
+                        s.classList.remove('active');
+                        s.style.color = '#E5E7EB';
+                    }
+                });
+            }
+        }
+
+        initializeStars();
+
+        stars.forEach(star => {
+            star.addEventListener('click', function () {
+                const rating = this.getAttribute('data-rating');
+                ratingText.textContent = ratingTexts[rating];
+
+                // Highlight selected and all stars to the left
+                stars.forEach(s => {
+                    if (parseInt(s.getAttribute('data-rating')) <= parseInt(rating)) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            });
+
+            // Hover effect
+            star.addEventListener('mouseenter', function () {
+                const rating = this.getAttribute('data-rating');
+                stars.forEach(s => {
+                    if (parseInt(s.getAttribute('data-rating')) <= parseInt(rating)) {
+                        s.style.color = '#F59E0B';
+                    } else {
+                        s.style.color = '#E5E7EB';
+                    }
+                });
+            });
+        });
+
+        // Reset on mouse leave
+        document.getElementById('starRating').addEventListener('mouseleave', function () {
+            const checkedStar = document.querySelector('.star-input:checked');
+            if (checkedStar) {
+                const rating = checkedStar.value;
+                stars.forEach(s => {
+                    if (parseInt(s.getAttribute('data-rating')) <= parseInt(rating)) {
+                        s.style.color = '#F59E0B';
+                        s.classList.add('active');
+                    } else {
+                        s.style.color = '#E5E7EB';
+                        s.classList.remove('active');
+                    }
+                });
+            } else {
+                stars.forEach(s => {
+                    s.style.color = '#E5E7EB';
+                    s.classList.remove('active');
+                });
+            }
+        });
+
+        // Character counter
+        const reviewText = document.getElementById('reviewText');
+        const charCounter = document.getElementById('charCounter');
+
+        function updateCharCounter() {
+            const length = reviewText.value.length;
+            charCounter.textContent = `${length} / 500 characters`;
+
+            if (length > 450) {
+                charCounter.classList.add('danger');
+                charCounter.classList.remove('warning');
+            } else if (length > 400) {
+                charCounter.classList.add('warning');
+                charCounter.classList.remove('danger');
+            } else {
+                charCounter.classList.remove('warning', 'danger');
+            }
+        }
+
+        reviewText.addEventListener('input', updateCharCounter);
+        updateCharCounter(); // Initialize counter
+
+        // Form validation
+        document.getElementById('ratingForm').addEventListener('submit', function (e) {
+            const rating = document.querySelector('.star-input:checked');
+            if (!rating) {
+                e.preventDefault();
+                alert('Please select a star rating');
+                return false;
+            }
+        });
+    </script>
+</body>
+
+</html>

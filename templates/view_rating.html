@@ -1,0 +1,886 @@
+{#
+<!DOCTYPE html>#}
+{#<html>#}
+{#
+
+<head>#}
+    {# <title>Ratings for {{ doctor.name }}</title>#}
+    {#</head>#}
+{#
+
+<body>#}
+    {# <h2>Ratings for Dr. {{ doctor.name }}</h2>#}
+    {# <p>Average Rating: {{ avg_rating }} ⭐</p>#}
+    {# <p>Total Reviews: {{ total_reviews }}</p>#}
+    {##}
+    {# <h3>All Reviews:</h3>#}
+    {# <ul>#}
+        {# {% for r in ratings %}#}
+        {# <li>#}
+            {# <strong>{{ r.PATIENT_ID.name }}</strong>:#}
+            {# {{ r.stars }} ⭐<br>#}
+            {# "{{ r.review }}"<br>#}
+            {# <em>{{ r.date }}</em>#}
+            {# </li>#}
+        {# {% empty %}#}
+        {# <li>No ratings yet.</li>#}
+        {# {% endfor %}#}
+        {# </ul>#}
+    {#</body>#}
+{#
+
+</html>#}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ratings for Dr. {{ doctor.name }} - DermaScan AI Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --info-color: #3B82F6;
+            --light-bg: #F7F9FC;
+            --dark-bg: #0A1929;
+            --sidebar-bg: #0F172A;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --border-color: #E5E7EB;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+            --gradient-2: linear-gradient(135deg, #F28F3B 0%, #FF6B35 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+        }
+
+        /* ========== MAIN CONTENT LAYOUT ========== */
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* ========== TOP HEADER ========== */
+        .admin-topbar {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar-title h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .topbar-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .topbar-breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .topbar-breadcrumb a:hover {
+            color: var(--accent-color);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        /* ========== DASHBOARD CONTENT ========== */
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        /* Doctor Profile Header */
+        .doctor-profile-header {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .doctor-avatar-large {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 8px 25px rgba(10, 46, 92, 0.3);
+            position: relative;
+        }
+
+        .verified-badge-large {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            background: var(--success-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 0.9rem;
+            border: 3px solid var(--white);
+        }
+
+        .doctor-profile-info {
+            flex: 1;
+        }
+
+        .doctor-profile-name {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .doctor-profile-specialty {
+            color: var(--light-text);
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .doctor-profile-rating {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Stats Cards */
+        .rating-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .rating-stat-card {
+            background: var(--white);
+            padding: 1.8rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .rating-stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .rating-stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+
+        .rating-stat-icon.avg {
+            background: var(--gradient-2);
+        }
+
+        .rating-stat-icon.total {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        }
+
+        .rating-stat-icon.five-star {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+
+        .rating-stat-value {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.3rem;
+        }
+
+        .rating-stat-label {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            font-weight: 500;
+        }
+
+        /* Rating Distribution */
+        .rating-distribution {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .section-title i {
+            color: var(--accent-color);
+        }
+
+        .distribution-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .distribution-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .distribution-label {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            min-width: 60px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .distribution-label i {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
+
+        .distribution-bar-container {
+            flex: 1;
+            height: 12px;
+            background: var(--light-bg);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .distribution-bar {
+            height: 100%;
+            background: var(--gradient-2);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .distribution-count {
+            min-width: 40px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .reviews-filter {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border-color);
+            background: var(--white);
+            color: var(--dark-text);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        /* Review Cards */
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .review-card {
+            background: var(--light-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .review-card:hover {
+            transform: translateX(5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .review-patient {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .patient-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .patient-info h4 {
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 0.3rem;
+        }
+
+        .review-date {
+            font-size: 0.85rem;
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .review-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .review-stars {
+            display: flex;
+            gap: 0.2rem;
+        }
+
+        .review-stars i {
+            color: var(--accent-color);
+            font-size: 1rem;
+        }
+
+        .review-stars i.empty {
+            color: #D1D5DB;
+        }
+
+        .rating-badge {
+            background: rgba(242, 143, 59, 0.1);
+            color: var(--accent-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .review-content {
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .review-text {
+            color: var(--dark-text);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        .review-text::before {
+            content: '"';
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .review-text::after {
+            content: '"';
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--light-text);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        /* Large Star Display */
+        .large-rating-display {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .large-stars {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .large-stars i {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+        }
+
+        .large-stars i.empty {
+            color: #D1D5DB;
+        }
+
+        .large-rating-value {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+            }
+
+            .doctor-profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .doctor-profile-rating {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-topbar {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .topbar-title h1 {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-content {
+                padding: 1rem;
+            }
+
+            .rating-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .reviews-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .review-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .review-rating {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .review-card {
+            animation: slideUp 0.4s ease-out backwards;
+        }
+
+        .review-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .review-card:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .review-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .review-card:nth-child(4) {
+            animation-delay: 0.25s;
+        }
+
+        .review-card:nth-child(5) {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <!-- Include Admin Sidebar -->
+        {% include 'admin_header.html' %}
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="admin-topbar">
+                <div class="topbar-title">
+                    <h1>Doctor Ratings & Reviews</h1>
+                    <div class="topbar-breadcrumb">
+                        <a href="/admin_home">Dashboard</a>
+                        <i class="fas fa-chevron-right"></i>
+                        <a href="/approved_doctors">Approved Doctors</a>
+                        <i class="fas fa-chevron-right"></i>
+                        <span>Ratings</span>
+                    </div>
+                </div>
+                <a href="/approved_doctors" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Doctors
+                </a>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Doctor Profile Header -->
+                <div class="doctor-profile-header">
+                    <div class="doctor-avatar-large">
+                        {% if doctor.name %}
+                        {{ doctor.name|slice:":2"|upper }}
+                        {% else %}
+                        DR
+                        {% endif %}
+                        <span class="verified-badge-large">
+                            <i class="fas fa-check"></i>
+                        </span>
+                    </div>
+                    <div class="doctor-profile-info">
+                        <h2 class="doctor-profile-name">Dr. {{ doctor.name }}</h2>
+                        <p class="doctor-profile-specialty">
+                            <i class="fas fa-stethoscope"></i> Dermatologist
+                        </p>
+                        <div class="doctor-profile-rating">
+                            <div class="large-rating-display">
+                                <div class="large-stars">
+                                    {% for i in "12345" %}
+                                    {% if forloop.counter <= avg_rating %} <i class="fas fa-star"></i>
+                                        {% else %}
+                                        <i class="fas fa-star empty"></i>
+                                        {% endif %}
+                                        {% endfor %}
+                                </div>
+                                <span class="large-rating-value">{{ avg_rating|default:"0.0" }}</span>
+                            </div>
+                            <span style="color: var(--light-text);">({{ total_reviews }} reviews)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rating Stats -->
+                <div class="rating-stats">
+                    <div class="rating-stat-card">
+                        <div class="rating-stat-icon avg">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="rating-stat-value">{{ avg_rating|default:"0.0" }}</div>
+                        <div class="rating-stat-label">Average Rating</div>
+                    </div>
+
+                    <div class="rating-stat-card">
+                        <div class="rating-stat-icon total">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="rating-stat-value">{{ total_reviews|default:"0" }}</div>
+                        <div class="rating-stat-label">Total Reviews</div>
+                    </div>
+
+                    <div class="rating-stat-card">
+                        <div class="rating-stat-icon five-star">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="rating-stat-value">{{ five_star_count|default:"0" }}</div>
+                        <div class="rating-stat-label">5-Star Reviews</div>
+                    </div>
+                </div>
+
+                <!-- Rating Distribution -->
+                <div class="rating-distribution">
+                    <h3 class="section-title">
+                        <i class="fas fa-chart-bar"></i>
+                        Rating Distribution
+                    </h3>
+                    <div class="distribution-bars">
+                        {% for item in star_distribution %}
+                        <div class="distribution-row">
+                            <span class="distribution-label">{{ item.stars }} <i class="fas fa-star"></i></span>
+                            <div class="distribution-bar-container">
+                                <div class="distribution-bar" style="width: {{ item.percentage }}%;"></div>
+                            </div>
+                            <span class="distribution-count">{{ item.percentage|floatformat:0 }}%</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Reviews Section -->
+                <div class="reviews-section">
+                    <div class="reviews-header">
+                        <h3 class="section-title">
+                            <i class="fas fa-comment-dots"></i>
+                            All Reviews
+                        </h3>
+                        <div class="reviews-filter">
+                            <button class="filter-btn active">All</button>
+                            <button class="filter-btn">5 Star</button>
+                            <button class="filter-btn">4 Star</button>
+                            <button class="filter-btn">Recent</button>
+                        </div>
+                    </div>
+
+                    {% if ratings %}
+                    <div class="reviews-list">
+                        {% for r in ratings %}
+                        <div class="review-card" data-stars="{{ r.stars }}">
+                            <div class="review-header">
+                                <div class="review-patient">
+                                    <div class="patient-avatar">
+                                        {{ r.PATIENT_ID.name|slice:":2"|upper }}
+                                    </div>
+                                    <div class="patient-info">
+                                        <h4>{{ r.PATIENT_ID.name }}</h4>
+                                        <span class="review-date">
+                                            <i class="fas fa-calendar-alt"></i>
+                                            {{ r.date }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="review-rating">
+                                    <div class="review-stars">
+                                        {% for i in "12345" %}
+                                        {% if forloop.counter <= r.stars %} <i class="fas fa-star"></i>
+                                            {% else %}
+                                            <i class="fas fa-star empty"></i>
+                                            {% endif %}
+                                            {% endfor %}
+                                    </div>
+                                    <span class="rating-badge">{{ r.stars }}.0</span>
+                                </div>
+                            </div>
+                            <div class="review-content">
+                                <p class="review-text">{{ r.review }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-star-half-alt"></i>
+                        <h3>No Reviews Yet</h3>
+                        <p>This doctor hasn't received any reviews from patients yet.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const reviewCards = document.querySelectorAll('.review-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filterText = btn.textContent.trim();
+
+                reviewCards.forEach(card => {
+                    const stars = card.getAttribute('data-stars');
+
+                    if (filterText === 'All') {
+                        card.style.display = '';
+                    } else if (filterText === '5 Star' && stars === '5') {
+                        card.style.display = '';
+                    } else if (filterText === '4 Star' && stars === '4') {
+                        card.style.display = '';
+                    } else if (filterText === 'Recent') {
+                        card.style.display = '';
+                    } else if (filterText !== 'All' && filterText !== 'Recent') {
+                        if (filterText.includes(stars)) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+
+        // Animate distribution bars on load
+        document.addEventListener('DOMContentLoaded', function () {
+            const bars = document.querySelectorAll('.distribution-bar');
+            bars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 300);
+            });
+        });
+    </script>
+</body>
+
+</html>

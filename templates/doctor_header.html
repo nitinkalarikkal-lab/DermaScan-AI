@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/assets/img/dermascan-icon.svg" rel="icon" type="image/svg+xml">
+    <link href="/static/assets/img/favicon.png" rel="icon" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0A2E5C;
+            --secondary-color: #1D7A8C;
+            --accent-color: #F28F3B;
+            --success-color: #10B981;
+            --light-bg: #F7F9FC;
+            --dark-text: #1A1A2E;
+            --light-text: #6B7280;
+            --white: #FFFFFF;
+            --gradient-1: linear-gradient(135deg, #0A2E5C 0%, #1D7A8C 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        /* ========== DOCTOR HEADER ========== */
+        .doctor-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .doctor-header.scrolled {
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0.8rem clamp(1rem, 2vw, 2rem);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Logo Section */
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .header-logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .logo-icon img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .logo-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo-subtitle {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--secondary-color);
+            text-transform: uppercase;
+        }
+
+        /* Navigation */
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .nav-link {
+            padding: 0.7rem 1.2rem;
+            color: var(--dark-text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link i {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .nav-link:hover {
+            background: var(--light-bg);
+            color: var(--secondary-color);
+        }
+
+        .nav-link:hover i {
+            opacity: 1;
+        }
+
+        .nav-link.active {
+            background: rgba(29, 122, 140, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: var(--secondary-color);
+            border-radius: 2px 2px 0 0;
+        }
+
+        .nav-link:focus-visible,
+        .mobile-toggle:focus-visible {
+            outline: 3px solid rgba(242, 143, 59, 0.45);
+            outline-offset: 3px;
+            border-radius: 12px;
+        }
+
+        /* Profile Button */
+        .nav-profile {
+            margin-left: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: var(--gradient-1);
+            color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(10, 46, 92, 0.3);
+        }
+
+        .nav-profile:hover {
+            background: var(--gradient-1);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 46, 92, 0.4);
+        }
+
+        /* Logout Link */
+        .nav-logout {
+            margin-left: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+            background: transparent;
+        }
+
+        .nav-logout:hover {
+            background: var(--accent-color);
+            color: var(--white);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-toggle:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Mobile Navigation */
+        @media (max-width: 1024px) {
+            .header-container {
+                padding: 0.8rem 1.5rem;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .header-nav {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 300px;
+                height: calc(100vh - 70px);
+                background: var(--white);
+                box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                padding: 1.5rem;
+                transition: right 0.3s ease;
+                overflow-y: auto;
+            }
+
+            .header-nav.active {
+                right: 0;
+            }
+
+            .nav-link {
+                padding: 1rem 1.2rem;
+                border-radius: 10px;
+                margin-bottom: 0.5rem;
+            }
+
+            .nav-link.active::after {
+                display: none;
+            }
+
+            .nav-profile,
+            .nav-logout {
+                margin-left: 0;
+                margin-top: 1rem;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0.8rem 1rem;
+            }
+
+            .logo-text {
+                display: none;
+            }
+
+            .logo-icon {
+                width: 45px;
+                height: 45px;
+            }
+
+            .header-nav {
+                width: 280px;
+            }
+
+            .nav-link {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Mobile Menu Overlay */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .nav-overlay.active {
+            display: block;
+        }
+
+        .nav-badge {
+            background-color: #ef4444;
+            /* User Alert Red */
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            border-radius: 99px;
+            /* Pill shape */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 8px;
+            vertical-align: middle;
+            box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Doctor Header -->
+    <header class="doctor-header" id="doctorHeader">
+        <div class="header-container">
+            <!-- Logo -->
+            <a href="/doctor_index" class="header-logo">
+                <div class="logo-icon">
+                    <img src="/static/assets/img/dermascan-icon.svg" alt="DermaScan">
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">DermaScan</span>
+                    <span class="logo-subtitle">Doctor Portal</span>
+                </div>
+            </a>
+
+            <!-- Navigation -->
+            <nav class="header-nav" id="headerNav">
+                <a href="/doctor_index" class="nav-link active">
+                    <i class="fas fa-home"></i>
+                    Home
+                </a>
+                <a href="/manage_schedule" class="nav-link">
+                    <i class="fas fa-calendar-alt"></i>
+                    Schedules
+                </a>
+                <a href="/view_appoinment" class="nav-link">
+                    <i class="fas fa-clipboard-list"></i>
+                    Appointments
+                </a>
+                <a href="/doctor_paid_patients" class="nav-link">
+                    <i class="fas fa-comments"></i>
+                    Chat
+                    {% if unread_count > 0 %}
+                    <span class="nav-badge">{{ unread_count }}</span>
+                    {% endif %}
+                </a>
+                <a href="/doctor_complaint" class="nav-link">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Complaints
+                </a>
+                <a href="/doctor_feedback" class="nav-link">
+                    <i class="fas fa-star"></i>
+                    Feedback
+                </a>
+                <a href="/logout_view" class="nav-link nav-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+                <a href="/doctor_profile" class="nav-link nav-profile">
+                    <i class="fas fa-user-md"></i>
+                    Profile
+                </a>
+            </nav>
+
+            <!-- Mobile Toggle -->
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <script>
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const headerNav = document.getElementById('headerNav');
+        const navOverlay = document.getElementById('navOverlay');
+        const toggleIcon = mobileToggle?.querySelector('i');
+
+        if (mobileToggle && headerNav && navOverlay && toggleIcon) {
+            mobileToggle.addEventListener('click', function () {
+                headerNav.classList.toggle('active');
+                navOverlay.classList.toggle('active');
+
+                // Toggle icon
+                if (headerNav.classList.contains('active')) {
+                    toggleIcon.classList.remove('fa-bars');
+                    toggleIcon.classList.add('fa-times');
+                } else {
+                    toggleIcon.classList.remove('fa-times');
+                    toggleIcon.classList.add('fa-bars');
+                }
+            });
+
+            // Close menu when clicking overlay
+            navOverlay.addEventListener('click', function () {
+                headerNav.classList.remove('active');
+                navOverlay.classList.remove('active');
+                toggleIcon.classList.remove('fa-times');
+                toggleIcon.classList.add('fa-bars');
+            });
+
+            // Close menu when clicking a link
+            const navLinks = headerNav.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    if (window.innerWidth <= 1024) {
+                        headerNav.classList.remove('active');
+                        navOverlay.classList.remove('active');
+                        toggleIcon.classList.remove('fa-times');
+                        toggleIcon.classList.add('fa-bars');
+                    }
+                });
+            });
+        }
+
+        // Add scrolled class on scroll
+        const doctorHeader = document.getElementById('doctorHeader');
+        if (doctorHeader) {
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 50) {
+                    doctorHeader.classList.add('scrolled');
+                } else {
+                    doctorHeader.classList.remove('scrolled');
+                }
+            });
+        }
+
+        // Set active link based on current page
+        const currentPath = window.location.pathname;
+        const allNavLinks = document.querySelectorAll('.nav-link:not(.nav-profile):not(.nav-logout)');
+
+        if (allNavLinks.length > 0) {
+            allNavLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
