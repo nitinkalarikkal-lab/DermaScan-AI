@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - DermaScan AI</title>
+    <!-- Favicons -->
+    <link href="/static/assets/img/dermascan-icon.svg" rel="icon" type="image/svg+xml">
+    <link href="/static/assets/img/favicon.png" rel="icon" type="image/png">
+    <link href="/static/assets/img/favicon.ico" rel="shortcut icon">
+    <link href="/static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -559,8 +564,7 @@
                         </div>
                         <div class="appt-details">
                             <h4>Dr. {{ appt.shedule_id.DOCTOR_ID.name }}</h4>
-                            <p class="time-text"><i class="far fa-clock"></i> {{ appt.shedule_id.start_time }} - {{
-                                appt.shedule_id.end_time }}</p>
+                            <p class="time-text"><i class="far fa-clock"></i> {{ appt.shedule_id.start_time }} - {{ appt.shedule_id.end_time }}</p>
                             <span class="token-badge">Token #{{ appt.token_number }}</span>
                         </div>
                     </div>
@@ -801,17 +805,19 @@
                 </div>
 
                 <div class="feature-card">
-    <div class="feature-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            <line x1="9" y1="10" x2="9" y2="10"/>
-            <line x1="12" y1="10" x2="12" y2="10"/>
-            <line x1="15" y1="10" x2="15" y2="10"/>
-        </svg>
-    </div>
-    <h3>Chat Consultations</h3>
-    <p>Message your dermatologist directly through our secure chat system and get expert advice from the comfort of your home.</p>
-</div>
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                            <line x1="9" y1="10" x2="9" y2="10" />
+                            <line x1="12" y1="10" x2="12" y2="10" />
+                            <line x1="15" y1="10" x2="15" y2="10" />
+                        </svg>
+                    </div>
+                    <h3>Chat Consultations</h3>
+                    <p>Message your dermatologist directly through our secure chat system and get expert advice from the
+                        comfort of your home.</p>
+                </div>
             </div>
         </div>
     </section>

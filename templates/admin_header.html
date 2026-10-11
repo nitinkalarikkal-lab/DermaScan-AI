@@ -1,6 +1,8 @@
 {% load static %}
 <link href="/static/assets/img/dermascan-icon.svg" rel="icon" type="image/svg+xml">
 <link href="/static/assets/img/favicon.png" rel="icon" type="image/png">
+<link href="/static/assets/img/favicon.ico" rel="shortcut icon">
+<link href="/static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
@@ -407,7 +409,7 @@
 <aside class="admin-sidebar" id="adminSidebar">
     <!-- Sidebar Header -->
     <div class="sidebar-header">
-        <a href="/" class="sidebar-logo">
+        <a href="{% url 'admin_index' %}" class="sidebar-logo">
             <div class="sidebar-logo-icon">
                 <img src="/static/assets/img/dermascan-icon.svg" alt="DermaScan">
             </div>

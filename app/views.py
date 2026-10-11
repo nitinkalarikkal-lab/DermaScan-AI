@@ -55,6 +55,13 @@ def user_view_rating(request, doctor_id):
     })
 
 def home(request):
+    if request.user.is_authenticated:
+        if request.user.groups.filter(name='admin').exists():
+            return redirect('admin_index')
+        elif request.user.groups.filter(name='doctor').exists():
+            return redirect('doctor_index')
+        elif request.user.groups.filter(name='user').exists():
+            return redirect('user_home')
     return render(request,'home.html')
 def about(request):
     return render(request,'about.html')
@@ -129,7 +136,7 @@ def login_view(request):
 
 @login_required(login_url='login_view')
 def admin_home(request):
-    return render(request,'admin_home.html')
+    return redirect('admin_index')
 
 @login_required(login_url='login_view')
 def admin_header(request):
